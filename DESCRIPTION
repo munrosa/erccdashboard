@@ -1,0 +1,27 @@
+Package: erccdashboard
+Type: Package
+Title: Assessment of Gene Expression Measurement Technical Performance
+        with External Spike-in RNA Controls
+Version: 0.99.3
+Author: Sarah Munro, Steve Lund
+Maintainer: Sarah Munro <sarah.munro@nist.gov>
+Description: erccdashboard produces graphs and performance metrics for
+        gene expression measurements derived from analysis of the
+        External RNA Control Consortium (ERCC) spike-in controls.
+URL: https://github.com/usnistgov/erccdashboard,
+        http://tinyurl.com/erccsrm
+Depends: R (>= 3.1), ggplot2, gridExtra
+Imports: edgeR, gplots, grid, gtools, limma, locfit, MASS, plyr,
+        QuasiSeq, qvalue, reshape2, ROCR, scales, stringr
+License: GPL (>=2)
+Collate: runDashboard.R initDat.R dashboardFile.R plotAdjust.R
+        loadERCCInfo.R loadExpMeas.R getDesignMat.R normalizeDat.R
+        prepERCCDat.R est_r_m.R dynRangePlot.R geneExprTest.R
+        testDECount.R testDEArray.R erccROC.R estLODR.R multiplot.R
+        printLODRres.R saveERCCPlots.R maSignal.R annotLODR.R
+biocViews: GeneExpression, Transcription, AlternativeSplicing,
+        DifferentialExpression, DifferentialSplicing, Genetics,
+        Microarray, mRNAMicroarray, RNASeq, BatchEffect,
+        MultipleComparison, QualityControl
+LazyData: yes
+Roxygen: list(wrap = FALSE)
