@@ -23,7 +23,7 @@ library( "erccdashboard" )
 \maketitle
 
 This vignette describes the use of the erccdashboard R package to analyze 
-External RNA Control Consortium (ERCC) spike-in control ratio mixtures in gene
+External RNA Controls Consortium (ERCC) spike-in control ratio mixtures in gene
 expression experiments. If you use this package for method validation of your
 gene expression experiments please cite our manuscript that describes this R 
 package using citation("erccdashboard").
@@ -337,15 +337,11 @@ parameter that may be adjusted is the probability for the LODR estimate, in the
 default analysis prob = 0.9 is selected.
 
 \subsection{Options for Printing Plots to File}
-The function savePlots will save selected figures to a pdf file. The default 
-is the 4 manuscript figures to a single page (plotsPerPg = "manuscript"). 
+The function \verb|saveERCCPlots| will save selected figures to a pdf file. The default 
+is to print the 4 main erccdashboard figures to a single page (plotsPerPg = "main"). 
 If plotsPerPg = "single" then each plot is placed on an 
 individual page in one pdf file. If plotlist is not defined (plotlist = NULL)
-then all plots in \verb|exDat$Figures| are printed to the file.
-
-To print 4 plots from manuscript to a single page pdf file use 
-plotsPerPg = "manuscript" in the \verb|saveERCCPlots| function or to create a 
-multiplepage pdf of all plots produced use plotsPerPg = "single". 
+then all plots in \verb|exDat$Figures| are printed to the pdf file. 
 
 \subsection{Analysis of Alternative Spike-in Designs}
 By default the package is configured to analyze the ERCC ratio mixtures produced

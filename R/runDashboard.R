@@ -106,7 +106,7 @@ runDashboard <- function(datType=NULL, isNorm = FALSE,
     
     ### Saving plots and results
     # Convenience function to save 4 main figures to file
-    saveERCCPlots(exDat,saveas = "jpeg")
+    saveERCCPlots(exDat,saveas = "pdf")
     
     # Save exDat to a RData file for later use
     cat("\nSaving exDat list to .RData file...")
