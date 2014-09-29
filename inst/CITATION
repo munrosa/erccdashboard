@@ -2,11 +2,11 @@ citHeader("Please cite our paper when you use the erccdashboard package for anal
 
 citEntry(
    entry="article",
-   title = "Assessing Technical Performance in Differential Gene Expression Experiments with External Spike-in RNA Control Ratio Mixtures",
-   author = "Munro SA, Lund S, Pine PS, Binder H, Clevert D, Conesa A, Dopazo J, Fasold M, Hochreiter S, Hong H, Jafari N, Kreil DP, Labaj PP, Li S, Liao Y, Lin S, Meehan J, Mason CE, Santoyo-Lopez J, Setterquist RA, Shi L, Shi W, Smyth GK, Stralis-Pavese N, Su Z, Tong W, Wang C, Wang J, Xu J, Ye Z, Yang Y, Yu Y, Salit M",
-   journal = "Nature Communications",
-   volume = 0,
-   pages = 00-00,
+   title = "Assessing technical performance in differential gene expression experiments with external spike-in RNA control ratio mixtures",
+   author = "Munro SA, Lund SP, Pine PS, Binder H, Clevert D-A, Conesa A, Dopazo J, Fasold M, Hochreiter S, Hong H, Jafari N, Kreil DP, Labaj PP, Li S, Liao Y, Lin SM, Meehan J, Mason CE, Santoyo-Lopez J, Setterquist RA, Shi L, Shi W, Smyth GK, Stralis-Pavese N, Su Z, Tong W, Wang C, Wang J, Xu J, Ye Z, Yang Y, Yu Y, Salit M",
+   journal = "Nat. Commun.",
+   volume = 5,
+   pages = 5125,
    year = 2014,
-   textVersion = "Munro SA, Lund S, Pine PS, Binder H, Clevert D, Conesa A, Dopazo J, Fasold M, Hochreiter S, Hong H, Jafari N, Kreil DP, Labaj PP, Liao Y, Lin S, Meehan J, Mason CE, Santoyo J, Setterquist RA, Shi L, Shi W, Smyth GK, Stralis-Pavese N, Su Z, Tong W, Wang C, Wang J, Xu J, Ye Z, Yang Y, Yu Y, Salit M (Nature Communications, In Press 2014). Assessing Technical Performance in Differential Gene Expression Experiments with External Spike-in RNA Control Ratio Mixtures."
+   textVersion = "Munro SA et al. Assessing technical performance in differential gene expression experiments with external spike-in RNA control ratio mixtures. Nat. Commun. 5:5125 doi: 10.1038/ncomms6125 (2014)"
 )
