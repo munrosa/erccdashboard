@@ -1,121 +1,63 @@
-erccdashboard 0.99.4
-----------------------------------------------------------------
+CHANGES IN VERSION 0.99.4
+-------------------------
 
-NEW FEATURES
-
-* 
 
 BUG FIXES AND MINOR IMPROVEMENTS
 
-* Updated saveERCCPlots, description file, and citation file.
+    o Updated saveERCCPlots, description file, and citation file.
 
-REMOVED FUNCTIONALITY
 
-* 
+
+CHANGES IN VERSION 0.99.1
+-------------------------
+
+
+BUG FIXES AND MINOR IMPROVEMENTS
+
+    o Fixed bug in erccROC and estLODR code to only use P-values from ERCCs by coding 
+    "ERCC-00" prefix instead of "ERCC-" which in some cases might find endogenous
+    transcripts named with this prefix.
+
+
+
+CHANGES IN VERSION 0.99.0
+-------------------------
+
+NEW FEATURES
+
+    o Version set to 0.99.0 for submission to Bioconductor
 
 ISSUES
 
-* 
+    o CMD check still takes too long (> 5 minutes), probably due to differential 
+    expression testing in underlying package. This will be difficult to change.
 
 
-erccdashboard 0.99.1
-----------------------------------------------------------------
-
-NEW FEATURES
-
-* 
+CHANGES IN VERSION 0.9.12
+-------------------------
 
 BUG FIXES AND MINOR IMPROVEMENTS
 
-* Fixed bug in erccROC and estLODR code to only use P-values from ERCCs by coding 
-"ERCC-00" prefix instead of "ERCC-" which in some cases might find endogenous
-transcripts named with this prefix.
+    o Shortened vignette to reduce installation time 
 
-REMOVED FUNCTIONALITY
+    o Fixed userMixFile as.factor bug
 
-* 
+    o Updated namespace to pull in mgcv and nlme package functionality
+
 
 ISSUES
 
-* 
+    o CMD check still takes too long (> 5 minutes), probably due to differential 
+    expression testing in underlying package. This will be difficult to change.
 
-----------------------------------------------------------------
-erccdashboard 0.99.0
-----------------------------------------------------------------
-
-NEW FEATURES
-
-* Version set to 0.99.0 for submission to Bioconductor
+CHANGES IN VERSION 0.9.11
+-------------------------
 
 BUG FIXES AND MINOR IMPROVEMENTS
 
-* 
+    o Added examples to several functions including "dontrun" to minimize
+    installation time
 
-REMOVED FUNCTIONALITY
+    o Updated Namespace to include gplots
 
-*
-
-ISSUES
-
-* CMD check still takes too long (> 5 minutes), probably due to differential 
-expression testing in underlying package. This will be difficult to change.
-
-----------------------------------------------------------------
-erccdashboard 0.9.12
-----------------------------------------------------------------
-
-NEW FEATURES
-
-* 
-
-BUG FIXES AND MINOR IMPROVEMENTS
-
-* Shortened vignette to reduce installation time 
-
-* Fixed userMixFile as.factor bug
-
-* Updated namespace to pull in mgcv and nlme package functionality
-
-REMOVED FUNCTIONALITY
-
-*
-
-ISSUES
-
-* CMD check still takes too long (> 5 minutes), probably due to differential 
-expression testing in underlying package. This will be difficult to change.
-
-----------------------------------------------------------------
-erccdashboard 0.9.11
-----------------------------------------------------------------
-
-NEW FEATURES
-
-* 
-
-BUG FIXES AND MINOR IMPROVEMENTS
-
-* Added examples to several functions including "dontrun" to minimize
-installation time
-
-* Updated Namespace to include gplots
-
-REMOVED FUNCTIONALITY
-
-*
-----------------------------------------------------------------
-erccdashboard 0.9.10
-----------------------------------------------------------------
-
-NEW FEATURES
-
-* 
-
-BUG FIXES AND MINOR IMPROVEMENTS
-
-* 
-
-REMOVED FUNCTIONALITY
-
-*
 
