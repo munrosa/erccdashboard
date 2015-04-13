@@ -91,7 +91,7 @@ runDashboard <- function(datType=NULL, isNorm = FALSE,
     
     # Estimate LODR for ERCC controls
     # Required for subsequent functions
-    exDat = estLODR(exDat,kind = "ERCC", prob=0.9)
+    exDat <- estLODR(exDat,kind = "ERCC", prob=0.9)
     
     ## Estimate LODR using Simulated data from endogenous transcripts
     ## Not required for subsequent functions

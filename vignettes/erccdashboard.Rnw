@@ -26,7 +26,7 @@ This vignette describes the use of the erccdashboard R package to analyze
 External RNA Controls Consortium (ERCC) spike-in control ratio mixtures in gene
 expression experiments. If you use this package for method validation of your
 gene expression experiments please cite our manuscript that describes this R 
-package using citation("erccdashboard").
+package using citation(``erccdashboard'').
 
 In this vignette we demonstrate analysis of two types of gene expression 
 experiments from the SEQC project that used ERCC control ratio mixture 
@@ -98,18 +98,24 @@ choseFDR = 0.05 # user defined false discovery rate (FDR), default is 0.05
 @
 
 The first input argument, datType, indicates whether that data is integer count 
-data from an RNA-Seq experiment ("count") or data from a microarray experiment 
-("array"). The isNorm argument indicates if the input expression measures are 
+data from an RNA-Seq experiment (``count'') or data from a microarray experiment 
+(``array''). The isNorm argument indicates if the input expression measures are 
 already normalized, the default value is FALSE. If you want to use normalized
-RNA-Seq or microarray data in the analysis, the isNorm
-argument must be set to TRUE. If the data is normalized, then limma will be used
-for array data DE testing, but for RNA-Seq data, DE testing results must 
-be available in the working directory in a file named 
-"filenameRoot ERCC Pvals.csv"
+RNA-Seq or microarray data in your analysis, the isNorm
+argument must be set to TRUE. If isNorm is TRUE, then the software asks if the 
+input data is length normalized. Type Y at the command line in the R console if 
+the data is length normalized (e.g. FPKM or RPKM data) otherwise type N.
 
-The third argument, exTable, is the expression measure table.
+If the data is normalized, then limma will be used
+for array data differential expression (DE) testing, but for normalized 
+RNA-Seq data, DE testing results must be generated outside of the erccdashboard
+pipeline and the DE testing results should be provided in the working directory 
+in a file named 'filenameRoot ERCC Pvals.csv' (for details on how to do this see
+section \textbf{3.1 Flexibility in Differential Expression Testing}).
 
-Take a look at the RatTox experiment count table.
+The third argument, exTable, is the expression measure table. Take a look at the
+expression measure table from the RatTox experiment, to see an example exTable 
+argument:
 <<inspectRatCount,keep.source=TRUE>>=
 head(MET.CTL.countDat)
 @
@@ -125,8 +131,14 @@ column names.
 
 The default differential expression testing of
 RNA-Seq experiments in the erccdashboard is done with the QuasiSeq package, 
-which requires the use of integer count data. The default normalization of the 
-data is 75th percentile (also known as upper quartile) normalization. 
+which requires the use of integer count data. If you are trying to use either a 
+different approach for DE testing of RNA-Seq count data (e.g. edgeR or DESeq) 
+or RNA-Seq data that is not integer count data (e.g. FPKM data from 
+Cufflinks) please see section 
+\textbf{3.1 Flexibility in Differential Expression Testing}.
+
+The erccdashboard default normalization for RNA-Seq count data is 75th percentile 
+(also known as upper quartile) normalization. 
 It is optional to provide a vector of per replicate normalization factors 
 through the input argument repNormFactor, such as a vector of total reads for 
 each replicate. The example total reads vectors we provide here were derived 
@@ -158,7 +170,7 @@ The function runDashboard.R is provided for convenient default erccdashboard
 analysis. Execution of the runDashboard function calls the default functions for
 erccdashboard analysis and reports parameters and progress to the R console. The
 functions called within runDashboard.R are also available to the user (details 
-provided in Section 4). 
+provided in \textbf{Section 4}). 
 
 All data and analysis results are stored in the list object exDat. For 
 convenience the main diagnostic figures are saved to a pdf file and the exDat 
@@ -185,7 +197,7 @@ of the analysis the exDat structure is quite large.
 summary(exDat)
 @
 The figures from the analysis are stored in \verb|exDat$Figures|. The four main
-diagnostic figures that are saved to pdf are the dynRangePlot, rocPlot, 
+diagnostic figures that are saved to a pdf file are the dynRangePlot, rocPlot, 
 lodrERCCPlot, and maPlot.
 \clearpage
 \begin{center}
@@ -194,7 +206,7 @@ exDat$Figures$dynRangePlot
 @
 \end{center}
 For this particular experiment the relationship between abundance and signal for
-the ERCC controls show that the measurement results span a 2$^{15}$ dynamic 
+the ERCC controls shows that the measurement results span a 2$^{15}$ dynamic 
 range. These ERCC mixtures were designed to span a 2$^{20}$ dynamic range, but
 there was insufficient evidence to reliably quantify ERCC transcripts at low 
 abundances.
@@ -219,8 +231,12 @@ By modeling the relationship between average signal and p-values we can obtain
 Limit of Detection of Ratios (LODR) estimates for each differential fold change 
 (or Ratio,indicated by color) and a threshold p-value, p.thresh, indicated by 
 the dotted black line. LODR values can be compared between
-experiments to evaluate the ability to detect differences between samples as a 
-function of transcript abundance.
+experiments to evaluate detection of differences between samples as a 
+function of transcript abundance. If the input data used in
+erccdashboard analysis are unnormalized RNA-Seq counts, then the LODR 
+estimates from the lodrERCCPlot are unnormalized counts. If normalized 
+RNA-Seq data or microarray data are used for analysis then the LODR estimates 
+will have corresponding units.
 \clearpage
 \begin{center}
 <<ratPlotD,fig=TRUE,pdf=FALSE,png=TRUE >>=
@@ -281,7 +297,7 @@ isNorm = TRUE.
 
 To analyze the RNA-Seq reference RNA experiment data simply repeat the same command
 that you used in the previous section with the microarray data, but change the 
-datType to "count", use UHRR.HBRR.countDat as your exTable, and change your 
+datType to ``count'', use UHRR.HBRR.countDat as your exTable, and change your 
 filenameRoot to a different character string, so that your microarray data is 
 not overwritten.
 
@@ -297,36 +313,36 @@ runDashboard
 @
 
 \subsection{Flexibility in Differential Expression Testing}
-The \verb|geneExprTest| function wraps the QuasiSeq differential expression 
-testing package for datType = "count" or uses the limma package for differential
-expression testing if datType = "array". The function uses the DE testing 
-p-value results and choseFDR parameter to select a threshold p-value for LODR 
-estimation.
+The \verb|geneExprTest| function has 2 major actions:
 
-For count data if DE testing has already been done and 
-a correctly formatted filenameRoot.All.Pvals.csv file is provided with the
-necessary DE test results, then geneExprTest will have 
-reduced runtime. The function will look for a csv file with the name 
-"filenameRoot.All.Pvals.csv" and column names "Feature", "MnSignal", Pval", and 
-"Fold" must be in the file. "Feature" is a column of transcript names including 
-ERCC controls and endogenous transcripts, "MnSignal" is the mean signal across 
-sample replicates, "Pval" are the unadjusted P-values from differential 
-expression testing (Q-values will be automatically
+\begin{enumerate}
+    \item differential expression testing
+    \item selecting a p-value threshold based on DE testing
+\end{enumerate}
+
+For differential expression testing, \verb|geneExprTest| first looks for a correctly
+formatted filenameRoot.All.Pvals.csv file in the working directory. If this file 
+is not found then \verb|geneExprTest| proceeds with QuasiSeq differential expression 
+testing package for datType = ``count'' or uses the limma package for differential
+expression testing if datType = ``array''. 
+
+To use results from another DE testing tool instead of QuasiSeq (such as edgeR 
+or DESeq for count data or Cuffdiff for FPKM data from Cufflinks) the working 
+directory must contain a csv file with the name ``filenameRoot.All.Pvals.csv'' 
+and correct column headers.
+
+A correctly formatted ``filenameRoot.All.Pvals.csv'' file will have column names 
+``Feature'', ``MnSignal'', ``Pval'', and  ``Fold''. ``Feature'' is a column of transcript 
+names including ERCC controls and endogenous transcripts, ``MnSignal'' is the
+mean signal across sample replicates (e.g. counts or FPKM, etc.), ``Pval'' are the
+unadjusted P-values from differential expression testing (Q-values will be automatically
 estimated for the P-values, and take into account multiple hypothesis testing), 
-and "Fold" are the numeric fold changes for the ERCC controls (0.5, 4, 1, and 
-0.667) and for endogenous transcripts the "Fold" is NA.
-
-To use results from another DE testing tool (instead of QuasiSeq) the csv file 
-with the name "filenameRoot.All.Pvals.csv" and correct column headers should be 
-in the working directory.
-This file is required if the input data (exTable) is RNA-Seq data (datType = 
-"count") and if the data is already normalized (isNorm = TRUE).
-If isNorm is TRUE, then the software asks for user input about length 
-normalization. Type Y at the command line in the R console if the data is 
-length normalized (e.g. FPKM or RPKM data) otherwise type N.
-
-For array data the current option for differential expression testing is limited
-to limma.
+and ``Fold'' are the numeric fold changes for the ERCC controls (0.5, 4, 1, and 
+0.667) and for endogenous transcripts the ``Fold'' is NA.
+ 
+The \verb|geneExprTest| function must locate the ``filenameRoot.All.Pvals.csv'' 
+file in the working directory to select a threshold p-value for use in the 
+\verb|estLODR| function for LODR estimation.
 
 \subsection{Options for LODR Estimation}
 The default behavior of runDashboard is to use the \verb|estLODR| function to
@@ -338,8 +354,8 @@ default analysis prob = 0.9 is selected.
 
 \subsection{Options for Printing Plots to File}
 The function \verb|saveERCCPlots| will save selected figures to a pdf file. The default 
-is to print the 4 main erccdashboard figures to a single page (plotsPerPg = "main"). 
-If plotsPerPg = "single" then each plot is placed on an 
+is to print the 4 main erccdashboard figures to a single page (plotsPerPg = ``main''). 
+If plotsPerPg = ``single'' then each plot is placed on an 
 individual page in one pdf file. If plotlist is not defined (plotlist = NULL)
 then all plots in \verb|exDat$Figures| are printed to the pdf file. 
 
@@ -362,7 +378,7 @@ function.
 If all samples from both conditions were only spiked with a single ERCC mixture 
 (e.g. Ambion Catalog Number 4456740, ERCC RNA Spike-In Mix) a limited subset of 
 the package functions can be used (\verb|initDat|, \verb|est_r_m|, and 
-\verb|dynRangePlot|. For \verb|initDat| use ERCCMixes="Single" and 
+\verb|dynRangePlot|. For \verb|initDat| use ERCCMixes=``Single'' and 
 \verb|est_r_m| and \verb|dynRangePlot| functions can then be used to examine 
 the mRNA fraction differences for the pair of samples and evaluate the dynamic 
 range of the experiment. 
