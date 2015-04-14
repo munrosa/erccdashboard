@@ -2,19 +2,23 @@ CHANGES IN VERSION 1.1.1
 -------------------------
 
 
-Version incremented to 1.1.0 for Bioconductor 3.1 release.
+SIGNIFICANT USER-VISIBLE CHANGES
+
+
+    o Version incremented to 1.1.0 for Bioconductor 3.1 release.
 
 BUG FIXES AND MINOR IMPROVEMENTS
 
-	o Updated NEWS file, DESCRIPTION file,and improved documentation in vignette.
+    o Updated NEWS file, DESCRIPTION file,and improved documentation in vignette.
 
 
 CHANGES IN VERSION 1.0.0
 -------------------------
 
+SIGNIFICANT USER-VISIBLE CHANGES
 
-Version set to 1.0.0 for Bioconductor 3.0 release.
-No updates from 0.99.4.
+    o Version set to 1.0.0 for Bioconductor 3.0 release.
+    o No updates from 0.99.4.
 
 
 CHANGES IN VERSION 0.99.4
@@ -67,7 +71,7 @@ BUG FIXES AND MINOR IMPROVEMENTS
 ISSUES
 
     o CMD check still takes too long (> 5 minutes), probably due to differential 
-    expression testing in underlying package. This will be difficult to change.
+      expression testing in underlying package. This will be difficult to change.
 
 CHANGES IN VERSION 0.9.11
 -------------------------
@@ -75,7 +79,7 @@ CHANGES IN VERSION 0.9.11
 BUG FIXES AND MINOR IMPROVEMENTS
 
     o Added examples to several functions including "dontrun" to minimize
-    installation time
+      installation time
 
     o Updated Namespace to include gplots
 
