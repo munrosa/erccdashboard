@@ -249,6 +249,9 @@ maSignal <-function(exDat, alphaPoint=0.8, r_mAdjust=TRUE, replicate=TRUE){
                               "'(+/-) Weighted Standard Error'")
         rownames(rm_dat) <- expression(log(r[m]))
         
+        tt <- ttheme_default(colhead=list(fg_params = list(parse=TRUE)),
+                             rowhead=list(fg_params = list(parse=TRUE)))
+        
         # Plot ratio-signal data coding points below the LODR with open circles
         maPlot <- ggplot(maData, aes(x = A, y = M.Ave) ) + 
             geom_point(data = subset(maDatAll, maDatAll$Ratio == "Endo"),
@@ -265,13 +268,13 @@ maSignal <-function(exDat, alphaPoint=0.8, r_mAdjust=TRUE, replicate=TRUE){
                        size = 1, linetype = "longdash") + 
             ylab(ymalabel) + xlabel + 
             coord_cartesian(xlim = myXLimMA, ylim = myYLim) + colScale + 
-            annotation_custom(tableGrob(rm_dat,parse=TRUE, 
-                                        gpar.corefill = gpar(fill = "grey85",
-                                                             col = "white"), 
-                                        gpar.rowfill = gpar(fill = "grey80",
-                                                            col = "white"),
-                                        gpar.colfill = gpar(fill = "grey80",
-                                                            col = "white")), 
+            annotation_custom(tableGrob(rm_dat,theme=tt), 
+#                                         gpar.corefill = gpar(fill = "grey85",
+#                                                              col = "white"), 
+#                                         gpar.rowfill = gpar(fill = "grey80",
+#                                                             col = "white"),
+#                                         gpar.colfill = gpar(fill = "grey80",
+#                                                             col = "white")), 
                               #xmin = quantile(maData$A,probs=0.25),
                               #xmax = max(maData$A),
                               ymin = (myYLim[2]) - 0.25*myYLim[2], 

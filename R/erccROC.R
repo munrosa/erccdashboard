@@ -121,18 +121,21 @@ erccROC <- function(exDat){
         geom_path(size=2, aes(colour=Ratio), alpha=0.7) + 
         geom_point(size=5, aes(colour=Ratio), alpha=0.7) + 
         colScale + geom_abline(intercept=0, slope=1, linetype=2) +
-        theme_bw() +
-        annotation_custom(grob=
-                              tableGrob(AUCAnnot, show.rownames=FALSE, 
-                                        equal.width=TRUE, 
-                                        equal.height=TRUE,
-                                        gpar.corefill=gpar(fill="grey85",
-                                                             col="white"), 
-                                        gpar.rowfill=gpar(fill="grey80",
-                                                            col="white"),
-                                        gpar.colfill=gpar(fill="grey80",
-                                                            col="white")),
+        theme_bw() + 
+        annotation_custom(grob=tableGrob(AUCAnnot, rows=NULL),
                           xmin=0.375, xmax=1.0, ymin=0, ymax=0.25) +
+        
+#         annotation_custom(grob=
+#                               tableGrob(AUCAnnot, show.rownames=FALSE, 
+#                                         equal.width=TRUE, 
+#                                         equal.height=TRUE,
+#                                         gpar.corefill=gpar(fill="grey85",
+#                                                              col="white"), 
+#                                         gpar.rowfill=gpar(fill="grey80",
+#                                                             col="white"),
+#                                         gpar.colfill=gpar(fill="grey80",
+#                                                             col="white")),
+#                           xmin=0.375, xmax=1.0, ymin=0, ymax=0.25) +
         theme(legend.position=c(0.75, 0.5))
     
     exDat$Figures$rocPlot <- ROCplot
