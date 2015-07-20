@@ -1,3 +1,23 @@
+CHANGES IN VERSION 1.3.2
+-------------------------
+
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+
+    o Vignette is updated to include use of grid.arrange for viewing figures
+    
+    o multiplot function is deprecated and removed from the package, 
+        function is replaced with grid.arrange
+    
+
+BUG FIXES AND MINOR IMPROVEMENTS
+
+    o updated erccROC, estLODR, and maSignal to address changes to tableGrob in 
+        gridExtra package
+    
+
+
 CHANGES IN VERSION 1.3.1
 -------------------------
 
