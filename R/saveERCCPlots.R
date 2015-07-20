@@ -92,8 +92,9 @@ saveERCCPlots<-function(exDat, plotsPerPg = "main", saveas = "pdf", outName,
                          width=pwidth,height = pheight),
                stop(cat("\"saveas\" = ",saveas,
                         ", it must be \"pdf\", \"png\", or \"jpeg\"")))
-        multiplot(exDat$Figures$dynRangePlot, exDat$Figures$rocPlot,
-                  exDat$Figures$maPlot, exDat$Figures$lodrERCCPlot, cols=cols)
+       grid.arrange(exDat$Figures$dynRangePlot, exDat$Figures$rocPlot,
+                     exDat$Figures$maPlot, exDat$Figures$lodrERCCPlot,
+                     ncol=cols)
         dev.off()
     }
     if (plotsPerPg == "single"){
@@ -108,10 +109,12 @@ saveERCCPlots<-function(exDat, plotsPerPg = "main", saveas = "pdf", outName,
             if(nPlotsSum == nPlotsLength){
                 if(saveas != "pdf") cat("Ignoring \"saveas\" = \"",saveas,"\"\n")
                 cat("Printing plots to multiple pages in one PDF file.\n")
+                m1 <- marrangeGrob(grobs = plotlist,ncol = 1, nrow = 1,top = NULL)
                 pdf(file=paste(outName,"pdf",sep="."),
-                    onefile=TRUE,width=pwidth,
-                    height=pheight)
-                print(plotlist)
+                   onefile=TRUE,width=pwidth,
+                   height=pheight)
+                #ggsave(paste0(outName,".pdf"), m1)
+                print(m1)
                 dev.off()
             }
         }else{

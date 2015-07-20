@@ -263,14 +263,17 @@ estLODR <- function(exDat,kind = "ERCC", prob=0.9){
     }
     
     ## create inset table
-    my_table <- tableGrob(d=annoTable,
-                          show.rownames=FALSE,
-                          gpar.coretext =gpar(fontsize=14),
-                          gpar.coltext=gpar(fontsize=14),
-                          gpar.rowtext=gpar(fontsize=14),
-                          gpar.corefill = gpar(fill = "grey85", col = "white"), 
-                          gpar.rowfill = gpar(fill = "grey80", col = "white"),
-                          gpar.colfill = gpar(fill = "grey80", col = "white"))
+#    ttLODR <- ttheme_default(core=list(bg_fun = rectGrob(gp=gpar(fill=NA))))
+    
+    my_table <- tableGrob(d=annoTable,rows=NULL)
+#     my_table <- tableGrob(d=annoTable,
+#                           show.rownames=FALSE,
+#                           gpar.coretext =gpar(fontsize=14),
+#                           gpar.coltext=gpar(fontsize=14),
+#                           gpar.rowtext=gpar(fontsize=14),
+#                           gpar.corefill = gpar(fill = "grey85", col = "white"), 
+#                           gpar.rowfill = gpar(fill = "grey80", col = "white"),
+#                           gpar.colfill = gpar(fill = "grey80", col = "white"))
     
     # Appease R CMD Check
     MnSignal <- Pval <- Ratio <- xend <- yend <- NULL
@@ -319,9 +322,9 @@ estLODR <- function(exDat,kind = "ERCC", prob=0.9){
             geom_hline(yintercept = pval.cutoff, linetype = 2, size = 2 ) +
             theme_bw()+ legendPos
     }
-    
-    annotLODRplot <- arrangeGrob(LODRplot, arrangeGrob(my_table), 
-                                 ncol = 1, heights = c(2,0.5))
+
+    annotLODRplot <- grid.arrange(arrangeGrob(grobs = list(LODRplot, my_table), 
+                                               ncol = 1, heights = c(2,0.5),))
     
     nam <- paste0("lodr",kind,"Plot")
     exDat$Figures$plotLODR <- annotLODRplot
