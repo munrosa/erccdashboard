@@ -202,7 +202,7 @@ lodrERCCPlot, and maPlot.
 \clearpage
 \begin{center}
 <<ratPlotA,fig=TRUE>>=
-exDat$Figures$dynRangePlot
+grid.arrange(exDat$Figures$dynRangePlot)
 @
 \end{center}
 For this particular experiment the relationship between abundance and signal for
@@ -213,7 +213,7 @@ abundances.
 \clearpage
 \begin{center}
 <<ratPlotB,fig=TRUE>>=
-exDat$Figures$rocPlot
+grid.arrange(exDat$Figures$rocPlot)
 @
 \end{center}
 The receiver operator characteristic (ROC) curve and the Area Under the Curve 
@@ -224,7 +224,7 @@ for different experiments can be used to compare diagnostic performance.
 \clearpage
 \begin{center}
 <<ratPlotC,fig=TRUE>>=
-exDat$Figures$lodrERCCPlot
+grid.arrange(exDat$Figures$lodrERCCPlot)
 @
 \end{center}
 By modeling the relationship between average signal and p-values we can obtain 
@@ -240,7 +240,7 @@ will have corresponding units.
 \clearpage
 \begin{center}
 <<ratPlotD,fig=TRUE,pdf=FALSE,png=TRUE >>=
-exDat$Figures$maPlot
+grid.arrange(exDat$Figures$maPlot)
 @
 \end{center}
 An MA plot (Ratio of Signals vs Average Signals) shows the ratio measurements of
