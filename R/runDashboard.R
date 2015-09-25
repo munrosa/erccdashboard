@@ -43,7 +43,7 @@
 #' \donttest{
 #' data(SEQC.Example)
 #'      
-#' exDat = runDashboard(datType = "count",isNorm = FALSE,
+#' exDat <- runDashboard(datType = "count",isNorm = FALSE,
 #'                      exTable = MET.CTL.countDat, 
 #'                      filenameRoot = "COH.ILM",
 #'                      sample1Name = "MET", sample2Name = "CTL", 

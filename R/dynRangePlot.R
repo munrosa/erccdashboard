@@ -1,7 +1,12 @@
 #' Produce signal-abundance plot to evaluate dynamic range
 #'
-#' @param exDat    list, contains input data and stores analysis results
-#' 
+#' @param exDat      list, contains input data and stores analysis results
+#' @param allPoints  boolean, default is false, means of replicates will be 
+#'                      plotted. If true then all replicates will be plotted as
+#'                      individual points.
+#' @param labelReps  boolean, default is false. If true then replicates will be
+#'                      labeled.
+#'                      
 #' @examples
 #' data(SEQC.Example)
 #' 
@@ -13,17 +18,26 @@
 #'                  
 #' exDat <- est_r_m(exDat)
 #'                   
-#' exDat <- dynRangePlot(exDat)
+#' exDat <- dynRangePlot(exDat, allPoints="FALSE", labelReps ="FALSE")
 #' 
 #' exDat$Figures$dynRangePlot
 #' 
 #' @export
-dynRangePlot <- function(exDat){
+dynRangePlot <- function(exDat, allPoints, labelReps){
     
     ## Assign local variables
     sampleInfo <- exDat$sampleInfo
     plotInfo <- exDat$plotInfo
     erccInfo <- exDat$erccInfo
+    
+    ## check for allPoints argument
+    if(missing(allPoints)){
+        allPoints == FALSE
+    }
+    ## check for labelReps arguement
+    if(missing(labelReps)){
+        labelReps == FALSE
+    }
     
     if(is.null(exDat$idColsAdj)){
         idCols <- exDat$idCols
@@ -33,20 +47,34 @@ dynRangePlot <- function(exDat){
     }
     
     sampleNames <- exDat$sampleNames
-    
     indivxlabel <- plotInfo$ERCCxlabelIndiv
     avexlabel<- plotInfo$ERCCxlabelAve
     
     expressDat <- exDat$normERCCDat
     
-    reps <- (ncol(expressDat[-c(1)]))/2
+    totCol <- ncol(expressDat[-c(1)])
+    if(odd(totCol)) stop("Uneven number of replicates for the two sample types")
     
+    # Get number of replicates
+    reps <- (ncol(expressDat[-c(1)]))/2
+
+    # Default is to plot errorbars
     errorBars <- TRUE
+    # If there are not at least 3 reps, don't plot errorbars
+    
     if (reps < 3){
         errorBars <- FALSE
         cat(paste0("\nLess than 3 replicates per sample, no sd values ",
                    "or error bars will be available.\n"))
     }
+    if (allPoints == TRUE){
+        errorBars <- FALSE
+        cat(paste0("\nallPoints == TRUE, every replicate point will be plotted.\n"))
+        if(labelReps == TRUE){
+            cat(paste0("\nlabelReps == TRUE, points will be labeled.\n"))
+        }
+    }
+    
     designMat <- exDat$designMat
     FCcode <- erccInfo$FCcode 
     
@@ -65,11 +93,11 @@ dynRangePlot <- function(exDat){
               dim(dynRangeDatMix1)[1], "\n"))
     
     # Melt the data to create long data frame for ggplot
-    dynRangeDatMix1_l <- melt(dynRangeDatMix1,
+    dynRangeDatMix1_l <- reshape2::melt(dynRangeDatMix1,
                              id.vars=c("Feature", "Ratio", "Conc") ) 
     
     # Create data.frame of the experimental design factors
-    designVar <- colsplit(dynRangeDatMix1_l$variable, pattern="_",
+    designVar <- reshape2::colsplit(dynRangeDatMix1_l$variable, pattern="_",
                          names=names(designMat)[-1])
     designVar <- as.data.frame(lapply(designVar, as.factor))  
     
@@ -83,11 +111,11 @@ dynRangePlot <- function(exDat){
               dim(dynRangeDatMix2)[1], "\n"))
     
     # Melt the data to create long data frame for ggplot
-    dynRangeDatMix2_l <- melt(dynRangeDatMix2,
+    dynRangeDatMix2_l <- reshape2::melt(dynRangeDatMix2,
                               id.vars=c("Feature", "Ratio", "Conc") )
     
     # Create data.frame of the experimental design factors
-    designVar <- colsplit(dynRangeDatMix2_l$variable, pattern="_", 
+    designVar <- reshape2::colsplit(dynRangeDatMix2_l$variable, pattern="_", 
                           names=names(designMat)[-1])
     designVar <- as.data.frame(lapply(designVar, as.factor))
     
@@ -196,14 +224,14 @@ dynRangePlot <- function(exDat){
     myXLim <- c(xmin, xmax)
     
     if(is.null(myYLim)){
-        ymin <- min(AandBAveSD$value.Ave) - 1
-        ymax <- max(AandBAveSD$value.Ave) +1
+        ymin <- min(log2(AandB$value)) - 1
+        ymax <- max(log2(AandB$value)) +1
         myYLim <- c(ymin, ymax)
     }
     if((sampleInfo$datType == "array")&
-           (myYLim[1]+1 < min(AandBAveSD$value.Ave))){
-        ymin <- min(AandBAveSD$value.Ave) - 1
-        ymax <- max(AandBAveSD$value.Ave) +1
+           (myYLim[1]+1 < min(log2(AandB$value)))){
+        ymin <- min(log2(AandB$value)) - 1
+        ymax <- max(log2(AandB$value)) +1
         myYLim <- c(ymin, ymax)
     }
     myYLim <- myYLim
@@ -231,29 +259,51 @@ dynRangePlot <- function(exDat){
     
     dataFit$wtSet <- wtSet
     
+    # For case of reps < 3 set sd to 0, so no errorBars are plotted
     if(errorBars == FALSE) AandBAveSD$value.SD <- 0
     
     # Appease R CMD Check
     Sample <- Conc <- value.SD <- value.Ave <- Ratio <- ERCC.effect <- NULL
     Feature <- NULL
     
+    if (allPoints == FALSE){
+        # plot mean and sd error bars for dynamic range plot
+        dynRange <- ggplot() + 
+            geom_pointrange(data=subset(AandBAveSD, Sample == sampleNames[1]),
+                            aes(x=Conc, y=value.Ave, ymax=value.Ave + value.SD, 
+                                ymin=value.Ave - value.SD, colour=Ratio, 
+                                shape=Sample), alpha=0.6, size=1.25) + 
+            geom_pointrange(data=subset(AandBAveSD, Sample == sampleNames[2]),
+                            aes(x=Conc, y=value.Ave, ymax=value.Ave + value.SD,
+                                ymin=value.Ave - value.SD, colour=Ratio,
+                                shape=Sample), alpha=0.6, size=1.25) + xlabel + 
+            yinfo + plotLim + colScale + 
+            theme_bw() +theme( legend.justification=c(0, 1), legend.position=c(0, 1))    
+    }
+    if (allPoints == TRUE){
+        # include all data points on dynamic range plot
+        if(labelReps == FALSE){
+            dynRange <- ggplot(AandB) + 
+                geom_point(aes(x = log2(Conc), y = log2(value), 
+                               colour = Ratio, shape = Sample),
+                           alpha = 0.6, size = 6) + 
+                xlabel + 
+                yinfo + plotLim + colScale + 
+                theme_bw() +theme( legend.justification=c(0, 1), legend.position=c(0, 1))    
+        }else{
+            dynRange <- ggplot(AandB) + 
+                geom_point(aes(x = log2(Conc), y = log2(value), 
+                               colour = Ratio, shape = Sample),
+                           alpha = 0.6, size = 6) + 
+                geom_text(aes(x = log2(Conc), y = log2(value), label = Rep )) +
+                xlabel + 
+                yinfo + plotLim + colScale + 
+                theme_bw() +theme( legend.justification=c(0, 1), legend.position=c(0, 1))
+            
+        }
+            
+    }
     
-    dynRange <- ggplot() + 
-        geom_pointrange(data=subset(AandBAveSD, Sample == sampleNames[1]),
-                        aes(x=Conc, y=value.Ave, ymax=value.Ave + value.SD, 
-                            ymin=value.Ave - value.SD, colour=Ratio, 
-                            shape=Sample), alpha=0.6, size=1.25) + 
-        geom_pointrange(data=subset(AandBAveSD, Sample == sampleNames[2]),
-                        aes(x=Conc, y=value.Ave, ymax=value.Ave + value.SD,
-                            ymin=value.Ave - value.SD, colour=Ratio,
-                            shape=Sample), alpha=0.6, size=1.25) + xlabel + 
-        yinfo + plotLim + colScale + 
-        theme_bw() +theme( legend.justification=c(0, 1), legend.position=c(0, 1))
-    
-    showlmGeomSmooth <- dynRange + geom_smooth(data=dataFit, method=lm,
-                                              aes(x=Conc, y=value.Ave, 
-                                                  weight=wtSet),
-                                              colour="black", se=FALSE)
     
     ### Serial model approach
     
@@ -336,7 +386,9 @@ dynRangePlot <- function(exDat){
         cat("\nrangeResidPlot is empty")
     }
     cat("\n\nSaving dynRangePlot to exDat\n")
+    # save dynamic range plot
     exDat$Figures$dynRangePlot <- dynRange
+    # save ERCC specific effects plot
     exDat$Figures$rangeResidPlot <- effectsPlot
     
     
