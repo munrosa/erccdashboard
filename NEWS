@@ -1,4 +1,22 @@
 
+CHANGES IN VERSION 1.3.4
+-------------------------
+
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+
+    o None
+
+BUG FIXES AND MINOR IMPROVEMENTS
+
+    o Fixed allReps and labelReps value assignment
+
+    o Fixed bug for duplicate row names in array data
+    
+    o Fixed warning for incorrect sample names
+
+
 CHANGES IN VERSION 1.3.3
 -------------------------
 

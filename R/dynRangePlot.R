@@ -32,11 +32,11 @@ dynRangePlot <- function(exDat, allPoints, labelReps){
     
     ## check for allPoints argument
     if(missing(allPoints)){
-        allPoints == FALSE
+        allPoints <- FALSE
     }
     ## check for labelReps arguement
     if(missing(labelReps)){
-        labelReps == FALSE
+        labelReps <- FALSE
     }
     
     if(is.null(exDat$idColsAdj)){

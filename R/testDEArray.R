@@ -10,11 +10,11 @@ testDEArray <- function(exDat){
     #y <- cbind(y[c(1)],normy)
     erccInfo <- exDat$erccInfo
     sampleInfo <- exDat$sampleInfo
-    row.names(y) <- y$Feature
+    row.names(y) <- make.names(y$Feature, unique=TRUE)
     y <- y[-c(1)]
     
-    yERCC <- y[grep("ERCC-",row.names(y)),]
-    yAll <- y[-grep("ERCC-",row.names(y)),]
+    yERCC <- y[grep("ERCC.00",row.names(y)),]
+    yAll <- y[-grep("ERCC.00",row.names(y)),]
     
     # adjust for r_m before hypothesis testing
     if(!is.null(exDat$Results$r_m.res$r_m.mn)){

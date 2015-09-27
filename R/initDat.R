@@ -149,12 +149,11 @@ initDat <- function(datType=NULL, isNorm=FALSE, exTable=NULL,
     # check for sample 1 names to be in the first set of exTable sample columns
     sample1Name <- exDat$sampleInfo$sample1Name
     
-    col2Sample <- gsub(pattern = "_1",replacement = "",
-                       x = names(exDat$Transcripts)[2])
+    col2Sample <- grepl(sample1Name, names(exDat$Transcripts)[2])
     
-    if(sample1Name != col2Sample){
-        stop(paste("\nThe first set of columns in exTable are for sample",
-                   col2Sample,"and \nmust match sample1Name =",sample1Name,
+    if(col2Sample == FALSE){
+        stop(paste("\nThe first set of columns in exTable must match",
+                   "sample1Name =",sample1Name,
                    "\n","Please check sample and exTable names\n"))
     }
     

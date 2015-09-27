@@ -1,5 +1,24 @@
 <<<<<<< HEAD
-<<<<<<< HEAD
+=======
+CHANGES IN VERSION 1.3.4
+-------------------------
+
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+
+    o None
+
+BUG FIXES AND MINOR IMPROVEMENTS
+
+    o Fixed allReps and labelReps value assignment
+
+    o Fixed bug for duplicate row names in array data
+    
+    o Fixed warning for incorrect sample names
+    
+>>>>>>> master
+
 CHANGES IN VERSION 1.3.3
 -------------------------
 
@@ -17,8 +36,6 @@ BUG FIXES AND MINOR IMPROVEMENTS
     o Set minimum version requirements for ggplot2 and gridExtra
     
 
-=======
->>>>>>> fixed tableGrob dependency issues
 CHANGES IN VERSION 1.3.2
 -------------------------
 
@@ -38,12 +55,6 @@ BUG FIXES AND MINOR IMPROVEMENTS
         gridExtra package
     
 
-
-<<<<<<< HEAD
-=======
->>>>>>> test commit take 2
-=======
->>>>>>> fixed tableGrob dependency issues
 CHANGES IN VERSION 1.3.1
 -------------------------
 
