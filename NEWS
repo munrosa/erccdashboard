@@ -1,4 +1,16 @@
 
+CHANGES IN VERSION 1.3.5
+-------------------------
+
+
+SIGNIFICANT USER-VISIBLE CHANGES
+    o Updated help files
+    
+BUG FIXES AND MINOR IMPROVEMENTS
+
+    o add warning if sample1Name or sample2Name include spaces or special characters.
+
+
 CHANGES IN VERSION 1.3.4
 -------------------------
 

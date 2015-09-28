@@ -76,7 +76,15 @@ initDat <- function(datType=NULL, isNorm=FALSE, exTable=NULL,
         stop("Need to specify sample1Name.")
     if(missing(sample2Name))
         stop("Need to specify sample2Name.")
-    
+    # warn user to fix any problematic sample names...
+    if(grepl("[^[:alnum:]]", sample1Name))
+        stop(paste("Only alphanumeric characters are allowed for sample1Name",
+             "and sample2Name\n",
+             "do not use spaces or punctuation characters.\n"))
+    if(grepl("[^[:alnum:]]", sample2Name))
+        stop(paste("Only alphanumeric characters are allowed for sample1Name",
+             "and sample2Name\n",
+             "do not use spaces or punctuation characters.\n"))
     myYLimMA <- ratioLim
     myXLimMA <- signalLim
     xlimEffects <- c(-15,15)

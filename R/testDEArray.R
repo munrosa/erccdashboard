@@ -11,10 +11,13 @@ testDEArray <- function(exDat){
     erccInfo <- exDat$erccInfo
     sampleInfo <- exDat$sampleInfo
     row.names(y) <- make.names(y$Feature, unique=TRUE)
+    # Replace the "." in the ERCC row names with "_"
+    row.names(y) <- gsub(pattern = "ERCC.00",
+                         replacement = "ERCC-00", x = row.names(y))
     y <- y[-c(1)]
     
-    yERCC <- y[grep("ERCC.00",row.names(y)),]
-    yAll <- y[-grep("ERCC.00",row.names(y)),]
+    yERCC <- y[grep("ERCC-00",row.names(y)),]
+    yAll <- y[-grep("ERCC-00",row.names(y)),]
     
     # adjust for r_m before hypothesis testing
     if(!is.null(exDat$Results$r_m.res$r_m.mn)){
@@ -68,8 +71,8 @@ testDEArray <- function(exDat){
     yMns <- data.frame(Feature = row.names(y), MnSignal = rowMeans(y))
     mergedRes <- merge(res,yMns,by="Feature")
     
-    ERCCres<- mergedRes[grep("ERCC-",mergedRes$Feature),]
-    Endores <- mergedRes[-grep("ERCC-",mergedRes$Feature),]
+    ERCCres<- mergedRes[grep("ERCC-00",mergedRes$Feature),]
+    Endores <- mergedRes[-grep("ERCC-00",mergedRes$Feature),]
     
     ercc.pval.res <- data.frame( Feature = ERCCres$Feature,
                                  MnSignal = ERCCres$MnSignal,
