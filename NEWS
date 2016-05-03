@@ -1,0 +1,167 @@
+
+CHANGES IN VERSION 1.3.5
+-------------------------
+
+
+SIGNIFICANT USER-VISIBLE CHANGES
+    o Updated help files
+    
+BUG FIXES AND MINOR IMPROVEMENTS
+
+    o add warning if sample1Name or sample2Name include spaces or special characters.
+
+
+CHANGES IN VERSION 1.3.4
+-------------------------
+
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+
+    o None
+
+BUG FIXES AND MINOR IMPROVEMENTS
+
+    o Fixed allReps and labelReps value assignment
+
+    o Fixed bug for duplicate row names in array data
+    
+    o Fixed warning for incorrect sample names
+
+
+CHANGES IN VERSION 1.3.3
+-------------------------
+
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+
+    o Updated dynRangePlot - function can now plot all replicates with or 
+        without replicate labels
+
+BUG FIXES AND MINOR IMPROVEMENTS
+
+    o Added warnings to initDat function for incorrect sample names and missing
+        1:1 controls from userMixFileß
+    o Set minimum version requirements for ggplot2 and gridExtra
+    
+
+CHANGES IN VERSION 1.3.2
+-------------------------
+
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+
+    o Vignette is updated to include use of grid.arrange for viewing figures
+    
+    o multiplot function is deprecated and removed from the package, 
+        function is replaced with grid.arrange
+    
+
+BUG FIXES AND MINOR IMPROVEMENTS
+
+    o updated erccROC, estLODR, and maSignal to address changes to tableGrob in 
+        gridExtra package
+    
+
+CHANGES IN VERSION 1.3.1
+-------------------------
+
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+
+    o Version incremented to 1.3.1 for development.
+
+BUG FIXES AND MINOR IMPROVEMENTS
+
+    o Updated DESCRIPTION file, NEWS file and .gitignore file
+
+
+CHANGES IN VERSION 1.1.1
+-------------------------
+
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+
+    o Version incremented to 1.1.0 for Bioconductor 3.1 release.
+
+BUG FIXES AND MINOR IMPROVEMENTS
+
+    o Updated NEWS file, DESCRIPTION file,and improved documentation in vignette.
+
+
+CHANGES IN VERSION 1.0.0
+-------------------------
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Version set to 1.0.0 for Bioconductor 3.0 release.
+    o No updates from 0.99.4.
+
+
+CHANGES IN VERSION 0.99.4
+-------------------------
+
+
+BUG FIXES AND MINOR IMPROVEMENTS
+
+    o Updated saveERCCPlots, description file, and citation file.
+
+
+
+CHANGES IN VERSION 0.99.1
+-------------------------
+
+
+BUG FIXES AND MINOR IMPROVEMENTS
+
+    o Fixed bug in erccROC and estLODR code to only use P-values from ERCCs by coding 
+    "ERCC-00" prefix instead of "ERCC-" which in some cases might find endogenous
+    transcripts named with this prefix.
+
+
+
+CHANGES IN VERSION 0.99.0
+-------------------------
+
+NEW FEATURES
+
+    o Version set to 0.99.0 for submission to Bioconductor
+
+ISSUES
+
+    o CMD check still takes too long (> 5 minutes), probably due to differential 
+    expression testing in underlying package. This will be difficult to change.
+
+
+CHANGES IN VERSION 0.9.12
+-------------------------
+
+BUG FIXES AND MINOR IMPROVEMENTS
+
+    o Shortened vignette to reduce installation time 
+
+    o Fixed userMixFile as.factor bug
+
+    o Updated namespace to pull in mgcv and nlme package functionality
+
+
+ISSUES
+
+    o CMD check still takes too long (> 5 minutes), probably due to differential 
+      expression testing in underlying package. This will be difficult to change.
+
+CHANGES IN VERSION 0.9.11
+-------------------------
+
+BUG FIXES AND MINOR IMPROVEMENTS
+
+    o Added examples to several functions including "dontrun" to minimize
+      installation time
+
+    o Updated Namespace to include gplots
+
+
