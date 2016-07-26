@@ -93,7 +93,7 @@ saveERCCPlots<-function(exDat, plotsPerPg = "main", saveas = "pdf", outName,
                stop(cat("\"saveas\" = ",saveas,
                         ", it must be \"pdf\", \"png\", or \"jpeg\"")))
        grid.arrange(exDat$Figures$dynRangePlot, exDat$Figures$rocPlot,
-                     exDat$Figures$maPlot, exDat$Figures$lodrERCCPlot,
+                    exDat$Figures$maPlot, exDat$Figures$lodrERCCPlot,
                      ncol=cols)
         dev.off()
     }
@@ -120,5 +120,6 @@ saveERCCPlots<-function(exDat, plotsPerPg = "main", saveas = "pdf", outName,
         }else{
             stop(cat("\"plotlist\" is not a list! ")) 
         }    
-    } 
+    }
+
 }

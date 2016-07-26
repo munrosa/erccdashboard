@@ -290,10 +290,10 @@ estLODR <- function(exDat,kind = "ERCC", prob=0.9){
                                             ymin=fitLower, 
                                             ymax=fitUpper,
                                             fill = Ratio), alpha = 0.3,
-                        colour=NA,show_guide=FALSE) + 
+                        colour=NA,show.legend=FALSE) + 
             geom_line(data = lineDat,aes(x = x.new,
                                          y=fitLine, 
-                                         colour = Ratio),show_guide = FALSE) + 
+                                         colour = Ratio),show.legend = FALSE) + 
             colScale + fillScale + xlabDE + ylab("DE Test P-values") + 
             geom_hline(yintercept = pval.cutoff, linetype = 2, size = 2 ) + 
             geom_segment(data = arrowDat, aes(x = x,
@@ -314,21 +314,22 @@ estLODR <- function(exDat,kind = "ERCC", prob=0.9){
                                             ymin=fitLower, 
                                             ymax=fitUpper,
                                             fill = Ratio), alpha = 0.3,
-                        colour= NA,show_guide=FALSE) + 
+                        colour= NA,show.legend=FALSE) + 
             geom_line(data = lineDat,aes(x = x.new,
                                          y=fitLine, 
-                                         colour = Ratio),show_guide = FALSE) + 
+                                         colour = Ratio),show.legend = FALSE) + 
             colScale + fillScale + xlabDE + ylab("DE Test P-values") + 
             geom_hline(yintercept = pval.cutoff, linetype = 2, size = 2 ) +
             theme_bw()+ legendPos
     }
 
     annotLODRplot <- grid.arrange(arrangeGrob(grobs = list(LODRplot, my_table), 
-                                               ncol = 1, heights = c(2,0.5),))
+                                               ncol = 1, heights = c(2,0.5)))
+    dev.off()
     
     nam <- paste0("lodr",kind,"Plot")
     exDat$Figures$plotLODR <- annotLODRplot
-    #print(exDat$Figures$plotLODR)
+    
     names(exDat$Figures)[which(names(exDat$Figures) == "plotLODR")] <- nam
     
     nam <- paste("lodr.res",kind,sep = ".")

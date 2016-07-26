@@ -359,7 +359,7 @@ dynRangePlot <- function(exDat, allPoints, labelReps){
                                                (1.5)*IQR(ERCC.effect))),
                       aes(x=AveConc, y=ERCC.effect, label=gsub("ERCC-00","",
                                                                      Feature)),
-                      colour="black", show_guide=FALSE, angle=45, hjust=-0.25, 
+                      colour="black", show.legend=FALSE, angle=45, hjust=-0.25, 
                       position=position_jitter(width=0.5)) + theme_bw() + 
             theme(legend.justification=c(0, 0), legend.position=c(0, 0))
     }else{

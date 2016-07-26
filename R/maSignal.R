@@ -74,6 +74,10 @@ maSignal <-function(exDat, alphaPoint=0.8, r_mAdjust=TRUE, replicate=TRUE){
         myDataERCC = cnt
     }
     
+    if(exDat$sampleInfo$isNorm==TRUE){
+        myDataERCC = cnt
+    }
+    
     sampleNameList = c(sample1,sample2)
     
     dat = cbind(Feature = myDataERCC[c(1)], Ratio = "Endo",

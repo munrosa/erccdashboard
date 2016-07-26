@@ -1,4 +1,32 @@
 
+CHANGES IN VERSION 1.7.1
+-------------------------
+
+SIGNIFICANT USER-VISIBLE CHANGES
+    o 
+    
+BUG FIXES AND MINOR IMPROVEMENTS
+    o Fixed conditional statement for normalized microarray data in testDEArray.
+    o Added dev.off to close the last plot in an attempt to prevent Rplots.pdf 
+    when run via Rscripts on commandline.
+
+
+CHANGES IN VERSION 1.5.1
+-------------------------
+
+SIGNIFICANT USER-VISIBLE CHANGES
+    o 
+    
+BUG FIXES AND MINOR IMPROVEMENTS
+    o simplified normalizeDat function, since array data and count data are 
+    treated the same, if repNormFactor (normalization factors) isn't provided 
+    by the user, then 75th percentile normalization is used. 10^6 multiplier 
+    that was used for per million read scaling is removed for the case of user 
+    provided repNormFactor (it's unlikely that this was used by most users)
+    
+    o removed deprecated calls from ggplot2 (show_guide --> show.legend)
+
+
 CHANGES IN VERSION 1.3.5
 -------------------------
 

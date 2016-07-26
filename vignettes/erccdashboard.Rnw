@@ -273,7 +273,7 @@ amongst laboratories and across platforms.
 \subsection{Analysis of an UHRR vs. HBRR Microarray experiment}
 To analyze the example reference RNA experiment microarray data use the 
 following command:
-<<SEQCMainArray,results=hide>>=
+<<SEQCMainArray,results=hide, fig=FALSE>>=
 exDat <- runDashboard(datType="array", isNorm = FALSE,
                       exTable=UHRR.HBRR.arrayDat,
                       filenameRoot = "Lab13.array",

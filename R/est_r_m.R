@@ -210,7 +210,7 @@ est_r_m <- function(exDat){
             ylab(expression(log(r[m]))) + 
             geom_text(data = textDat, aes(x = AveConc, y = (r_m.hat - nominal),
                                           label = gsub("ERCC-00","",Feature)),
-                      colour="black", size=6,show_guide=FALSE,angle=90) + 
+                      colour="black", size=6,show.legend=FALSE,angle=90) + 
             geom_hline(yintercept = r_m.mn) + colScale + theme_bw()
         theme(legend.justification=c(1,0), legend.position=c(1,0))  
     }else{

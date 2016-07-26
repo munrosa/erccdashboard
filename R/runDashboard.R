@@ -108,6 +108,7 @@ runDashboard <- function(datType=NULL, isNorm = FALSE,
     # Convenience function to save 4 main figures to file
     saveERCCPlots(exDat,saveas = "pdf")
     
+    
     # Save exDat to a RData file for later use
     cat("\nSaving exDat list to .RData file...")
     nam <- paste(exDat$sampleInfo$filenameRoot, "exDat",sep = ".")
@@ -121,5 +122,6 @@ runDashboard <- function(datType=NULL, isNorm = FALSE,
     # End analysis and return exDat to global environ. / workspace
     cat("\nAnalysis completed.")
     return(exDat)
+    dev.off()
     
 }
