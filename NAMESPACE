@@ -14,6 +14,12 @@ import(QuasiSeq)
 import(scales)
 import(stringr)
 importFrom(qvalue, qvalue)
+importFrom("grDevices", "dev.off", "jpeg", "pdf", "png")
+importFrom("stats", "IQR", "coef", "fivenum", "lm", "loess",
+           "model.matrix", "optimize", "predict", "preplot", "qnorm",
+           "qt", "quantile", "residuals", "rnbinom", "sd",
+           "smooth.spline", "var")
+importFrom("utils", "data", "read.csv", "write.csv")
 export(annotLODR)
 export(dynRangePlot)
 export(erccROC)

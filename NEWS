@@ -1,3 +1,12 @@
+CHANGES IN VERSION 1.7.2
+-------------------------
+
+SIGNIFICANT USER-VISIBLE CHANGES
+    o 
+    
+BUG FIXES AND MINOR IMPROVEMENTS
+    o Fixed minor syntax issues in Rd files
+    o Added more importFrom calls to Namespace file
 
 CHANGES IN VERSION 1.7.1
 -------------------------
