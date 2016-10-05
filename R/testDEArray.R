@@ -18,7 +18,7 @@ testDEArray <- function(exDat){
     
     yERCC <- y[grep("ERCC-00",row.names(y)),]
     yAll <- y[-grep("ERCC-00",row.names(y)),]
-    
+
     # adjust for r_m before hypothesis testing
     if(!is.null(exDat$Results$r_m.res$r_m.mn)){
         adj <- exp(exDat$Results$r_m.res$r_m.mn)
