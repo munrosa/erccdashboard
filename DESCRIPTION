@@ -2,7 +2,7 @@ Package: erccdashboard
 Type: Package
 Title: Assess Differential Gene Expression Experiments with ERCC
         Controls
-Version: 1.7.2
+Version: 1.8.0
 Author: Sarah Munro, Steve Lund
 Maintainer: Sarah Munro <sarah.munro@nist.gov>
 Description: Technical performance metrics for differential gene expression
