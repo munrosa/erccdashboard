@@ -2,16 +2,15 @@ Package: erccdashboard
 Type: Package
 Title: Assess Differential Gene Expression Experiments with ERCC
         Controls
-Version: 1.11.0
+Version: 1.11.1
 Author: Sarah Munro, Steve Lund
-Maintainer: Sarah Munro <sarah.munro@nist.gov>
+Maintainer: Sarah Munro <sarah.munro@gmail.com>
 Description: Technical performance metrics for differential gene expression
     experiments using External RNA Controls Consortium (ERCC) spike-in ratio
     mixtures.
-URL: http://www.nist.gov/mml/bbd/erccdashboard.cfm,
-    https://github.com/usnistgov/erccdashboard,
+URL: https://github.com/munrosa/erccdashboard,
     http://tinyurl.com/erccsrm
-BugReports: https://github.com/usnistgov/erccdashboard/issues
+BugReports: https://github.com/munrosa/erccdashboard/issues
 Depends:
     R (>= 3.2),
     ggplot2 (>= 2.1.0),
