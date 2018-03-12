@@ -24,7 +24,6 @@ Imports:
     locfit,
     MASS,
     plyr,
-    QuasiSeq,
     qvalue,
     reshape2,
     ROCR,

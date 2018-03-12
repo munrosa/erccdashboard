@@ -113,6 +113,7 @@ saveERCCPlots<-function(exDat, plotsPerPg = "main", saveas = "pdf", outName,
                 pdf(file=paste(outName,"pdf",sep="."),
                    onefile=TRUE,width=pwidth,
                    height=pheight)
+                par(ask=FALSE)
                 #ggsave(paste0(outName,".pdf"), m1)
                 print(m1)
                 dev.off()

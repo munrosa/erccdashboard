@@ -1,14 +1,10 @@
-testDECount<- function(sampleInfo, exDat, cnt = cnt, info = info){
-    #library(QuasiSeq)
-    #library(DESeq)
-    #library(edgeR)
+testDECount <- function(sampleInfo, exDat, cnt = cnt, info = info){
+    # Pull info from exDat
     erccInfo <- exDat$erccInfo
     plotInfo <- exDat$plotInfo
     filenameRoot = sampleInfo$filenameRoot
     legendLabels = sampleInfo$legendLabels
     FCcode = erccInfo$FCcode
-    #totalSeqReads = sampleInfo$totalSeqReads
-    
     
     idCols = exDat$idColsAdj
     r_m.mn = exDat$Results$r_m.res$r_m.mn 
@@ -46,17 +42,8 @@ testDECount<- function(sampleInfo, exDat, cnt = cnt, info = info){
     ## Compute offset (e.g. total counts, 75% quantile, TMM, etc)
     if(is.null(normFactor)){
         log.offset <- c(rep(0,ncol(cnt)))
-        #stop(cat("\nlibe size normalization is missing\n"))
-        
-        #log.offset<-log(colSums(cnt))
-        #cat("\nUsing Mapped Reads\n")
-        #cat(colSums(cnt),"\n")  
     }else{
-        #log.offset<- log(repNormFactor)
         log.offset<- log(normFactor)
-        #cat("\nUsing repNormFactor\n")
-        #cat(repNormFactor,"\n")
-        
     }
     
     cat("\nShow log.offset\n")
@@ -135,109 +122,87 @@ testDECount<- function(sampleInfo, exDat, cnt = cnt, info = info){
     names(NBdisp)<-rownames(rbind(cnt,simcnt))
     NBdisptrend<-d2$trended.dispersion
     names(NBdisptrend)<-rownames(rbind(cnt,simcnt))
+  
+    use.fit <- glmQLFit(d2, design)
     
-    ### Plot estimated dispersions
-    xdat = ydat = xsim = ysim = xERCC = yERCC = NULL
-    dispcnt = data.frame(xdat = rowMeans(rbind(cnt,simcnt)), ydat = NBdisp)
-    dispSimcnt = data.frame(xsim = rowMeans(simcnt), 
-                            ysim=NBdisp[-c(1:nrow(cnt))])
-    dispERCCcnt = data.frame(xERCC = rowMeans(cnt)[ERCC],yERCC = NBdisp[ERCC])
+    qlf.res <- glmQLFTest(use.fit)
     
-    dispPlot = ggplot(dispcnt) + geom_point(aes(x = xdat, y = ydat)) + 
-        scale_x_log10() + xlab("Average Count") + ylab("Estimated Dispersion") +
-        geom_point(data = dispSimcnt,aes(x = xsim, y = ysim),colour = 3) + 
-        geom_point(data = dispERCCcnt, aes(x = xERCC, y = yERCC),colour = 2) + 
-        theme(legend.justification=c(1,1), legend.position=c(1,1))
-    #print(dispPlot) 
+    use.res <- qlf.res
     
-    ### Run QuasiSeq
-    use.fit<-QL.fit(rbind(cnt,simcnt), design.list,
-                    log.offset=log.offset, 
-                    NBdisp=NBdisptrend)# using trended dispersion from edgeR
-    
-    use.res<-QL.results(use.fit, Plot = FALSE)
-    
-    ### Collect results for simulated data; to be passed along to LODR function
-    #   sim.pval.res<-cbind(row.names(simcnt), rowMeans(simcnt),
-    #                       use.res$P.values$QLSpline[-(1:nrow(cnt))],
-    #                       use.res$log.P.values$QLSpline[-(1:nrow(cnt))],
-    #                       use.res$F.stat$QLSpline[-(1:nrow(cnt))],
-    #                       rep(unique(ERCC.FC[!is.na(ERCC.FC[,2]),2]),each=49),
-    #                       rep(use.res$d0[2],nrow(simcnt)))
+    ### Collect results for simulated data, to be passed along to LODR function
     Feature <- row.names(simcnt)
     MnSignal <- as.numeric(rowMeans(simcnt))
-    Pval <- use.res$P.values$QLSpline[-(1:nrow(cnt))]
-    LogPval <- use.res$log.P.values$QLSpline[-(1:nrow(cnt))]
-    F.stat <- use.res$F.stat$QLSpline[-(1:nrow(cnt))]
+    Pval <- use.res$table$PValue[-(1:nrow(cnt))]
+    LogPval <- log10(use.res$table$PValue)[-(1:nrow(cnt))]
+    F.stat <- use.res$table$F[-(1:nrow(cnt))]
     Fold <- rep(unique(ERCC.FC[!is.na(ERCC.FC[,2]),2]),each=49)
-    Den.df <- rep(use.res$d0[2],nrow(simcnt))
-    sim.pval.res <- data.frame(Feature, MnSignal, Pval, LogPval, F.stat, Fold, 
-                               Den.df)
-    #colnames(sim.pval.res)<-c("Feature","MnSignal","Pval","LogPval","F.stat",
-    #                           "Fold", "Den.df")
-    #rownames(sim.pval.res)<-rownames(simcnt)
+    sim.pval.res <- data.frame(Feature, MnSignal, Pval, LogPval, F.stat, Fold)
+    colnames(sim.pval.res)<-c("Feature","MnSignal","Pval","LogPval","F.stat",
+                               "Fold")
+    rownames(sim.pval.res)<-rownames(simcnt)
     
-    write.csv(sim.pval.res[-c(4,5,7)],file=paste(filenameRoot,"Sim Pvals.csv"),
-              row.names = FALSE)
+    write.csv(sim.pval.res[-c(4,5)],file=paste(filenameRoot,"Sim Pvals.csv"),
+    row.names = FALSE)
     
-    ## remove results for simulated data
+    ## remove results for simulated data (using indexing with 1:nrow(cnt))
     use.fit2<-use.fit
-    use.fit2$LRT<-matrix(use.fit2$LRT[1:nrow(cnt),],nrow(cnt),1)
-    use.fit2$phi.hat.dev<-use.fit2$phi.hat.dev[1:nrow(cnt)]
-    use.fit2$phi.hat.pearson<-use.fit2$phi.hat.pearson[1:nrow(cnt)]
-    use.fit2$mn.cnt<-use.fit2$mn.cnt[1:nrow(cnt)]
-    use.fit2$NB.disp<-use.fit2$NB.disp[1:nrow(cnt)]
-    use.fit2$fitted.values<-use.fit2$fitted.values[1:nrow(cnt),]
-    use.fit2$coefficients<-use.fit2$coefficients[1:nrow(cnt),]
+    use.fit2$coefficients <-use.fit2$coefficients[1:nrow(cnt),]
+    use.fit2$fitted.values <- use.fit2$fitted.values[1:nrow(cnt),]
+    use.fit2$deviance <- use.fit2$deviance[1:nrow(cnt)]
+    use.fit2$counts <- use.fit2$counts[1:nrow(cnt),]
+    use.fit2$unshrunk.coefficients <- use.fit2$unshrunk.coefficients[1:nrow(cnt),]
+    use.fit2$df.residual <- use.fit2$df.residual[1:nrow(cnt)]
+    use.fit2$offset <- use.fit2$offset[1:nrow(cnt),]
+    use.fit2$dispersion <- use.fit2$dispersion[1:nrow(cnt)]
+    use.fit2$AveLogCPM <- use.fit2$AveLogCPM[1:nrow(cnt)]
+    use.fit2$df.residual.zeros <- use.fit2$df.residual.zeros[1:nrow(cnt)]
+    use.fit2$var.post <- use.fit2$var.post[1:nrow(cnt)]
+    use.fit2$var.prior <- use.fit2$var.prior[1:nrow(cnt)]
     
-    use.res2<-QL.results(use.fit2, Plot = FALSE)
+    use.res2 <- glmQLFTest(use.fit2)
     
     ###################################
     #### Examine results for ERCCs ####
     ###################################
-    pvals<-use.res2$P.values$QLSpline
+    pvals<-use.res2$table$PValue
     names(pvals)<-rownames(cnt)
     ERCC.pvals<-pvals[ERCC]
-    
-    rownames(use.fit2$coefficients)<-rownames(cnt)
-    est.FC<-use.fit2$coefficients[ERCC,2]
     
     ## Reanalyze ERCC transcripts using adjusted offsets to center fold 
     ## change estimates
     adj <- r_m.mn #### Use r_m estimated from NegBin GLM
-    use.fit.adj<-QL.fit(cnt[ERCC,],design.list,log.offset=
-                            log.offset-rep(c(adj,0),each=ncol(cnt)/2),
-                        NBdisp=NBdisptrend[ERCC])
-    
-    rownames(use.fit.adj$coefficients)<-ERCC;
+    use.fit.adj <- glmQLFit(cnt[ERCC,], design, dispersion = NBdisptrend[ERCC],
+                            offset = log.offset - rep(c(adj,0),each=ncol(cnt)/2))
     est.FC.adj<-use.fit.adj$coefficients[ERCC,2]
     
     use.fit3<-use.fit2
-    rownames(use.fit3$LRT)<-rownames(cnt)
-    # substitute the r_m adjusted LRT for the ERCCs
-    use.fit3$LRT[ERCC,]<-use.fit.adj$LRT 
+    # Substitute ERCC centered data into full use.fit3 structure
+    use.fit3$coefficients[ERCC,] <- use.fit.adj$coefficients[ERCC,]
+    use.fit3$unshrunk.coefficients[ERCC,] <- use.fit.adj$unshrunk.coefficients[ERCC,]
+    use.fit3$var.prior[ERCC] <- use.fit.adj$var.prior[ERCC]
+    use.fit3$var.post[ERCC] <- use.fit.adj$var.post[ERCC]
     
-    use.res.adj<-QL.results(use.fit3, Plot = FALSE)
+    # deal with CompressedMatrix format to add the new ercc offsets...
+    expandedfit3 <- expandAsMatrix(use.fit3$offset)
+    expandedfit3[1:length(ERCC),] <- expandAsMatrix(use.fit.adj$offset)
+    recompress <- makeCompressedMatrix(expandedfit3)
+    use.fit3$offset <- recompress
     
-    pvals<-use.res.adj$P.values$QLSpline
-    log.pvals<-use.res.adj$log.P.values$QLSpline
-    F.stat<-use.res.adj$F.stat$QLSpline
-    names(F.stat)<-names(log.pvals)<-names(pvals)<-rownames(cnt)
+    use.res.adj<-glmQLFTest(use.fit3)
+     
+    # collect the results for plotting and writing a table
+    Feature <- row.names(use.res.adj$table)
+    MnSignal <- as.numeric(rowMeans(cnt))
+    #replace with edgeR results
+    Pval <- use.res.adj$table$PValue
+    LogPval <- log10(use.res.adj$table$PValue)
+    Qval <- qvalue(Pval)$qvalues
+    F.stat <- use.res.adj$table$F
     
-    qvals<-use.res.adj$Q.values$QLSpline
-    logRatio <- function(x, c1, c2){
-        log2(x[c1])-log2(x[c2])
-    }
-    totCol <- ncol(cnt)
+    names(Qval)<-names(F.stat)<-names(LogPval)<-names(Pval)<-rownames(cnt)
     
-    if(odd(totCol)) stop("Uneven number of replicates for the two sample types")
-    
-    ratioDat <- data.frame(t(apply(cnt,1,logRatio, 
-                                   c1=c(1:(totCol/2)),
-                                   c2=c(((totCol/2)+1):totCol))))
-    
-    colnames(ratioDat)<- "Log2Rat"
-    quasiSeq.res <- data.frame(Feature = names(pvals),
+    Log2FC <- use.res.adj$table$logFC
+    allDE.res <- data.frame(Feature = names(pvals),
                                MnSignal = rowMeans(cnt), 
                                Fold = 
                                    c(ERCC.FC[ERCC,2], rep(x=NA, length.out=
@@ -246,136 +211,65 @@ testDECount<- function(sampleInfo, exDat, cnt = cnt, info = info){
                                                                     (ERCC.FC[
                                                                         ERCC,2]
                                                                     ))))), 
-                               Log2Rat=ratioDat$Log2Rat, Pval=pvals,
-                               qvals=qvals, log.pvals=log.pvals, F.stat=F.stat, 
-                               den.df=rep(use.res.adj$d0[2], length(pvals)))
+                               Log2Rat=Log2FC, Pval=Pval,
+                               qvals=Qval, log.pvals=LogPval, F.stat=F.stat)
     
-    write.csv(quasiSeq.res[c(1,2,5,3)],
+    write.csv(allDE.res[c(1,2,5,3)],
               file=paste0(filenameRoot, ".All.Pvals.csv"), row.names = FALSE)
     
-    ERCC.pvals.adj<-pvals[ERCC]
+    ERCC.Pval.adj<-Pval[ERCC]
     ERCC.F.stat.adj<-F.stat[ERCC]
-    ERCC.log.pvals.adj<-log.pvals[ERCC]
+    ERCC.LogPval.adj<-LogPval[ERCC]
     
     ### Collect results for ERCCs; to be passed along to LODR function
-    pval.res<-data.frame(row.names(cnt[ERCC,]),rowMeans(cnt[ERCC,]),
-                         ERCC.pvals.adj,ERCC.log.pvals.adj,ERCC.F.stat.adj,
-                         ERCC.FC[ERCC,2],rep(use.res.adj$d0[2],
-                                             length(ERCC.pvals.adj)))
-    colnames(pval.res)<-c("Feature","MnSignal","Pval","LogPval","F.stat","Fold",
-                          "Den.df")
+    ERCC.pval.res<-data.frame(row.names(cnt[ERCC,]),rowMeans(cnt[ERCC,]),
+                              ERCC.Pval.adj,ERCC.LogPval.adj,ERCC.F.stat.adj,
+                              ERCC.FC[ERCC,2])
+    colnames(ERCC.pval.res)<-c("Feature","MnSignal","Pval","LogPval","F.stat","Fold")
     #print(str(pval.res))
-    row.names(pval.res) <- NULL
-    write.csv(pval.res[-c(4,5,7)],file=paste(filenameRoot,"ERCC Pvals.csv"),
+    row.names(ERCC.pval.res) <- NULL
+    write.csv(ERCC.pval.res[-c(4,5)],file=paste(filenameRoot,"ERCC Pvals.csv"),
               row.names = FALSE)
-    print("Finished DE testing")
+    cat("Finished DE testing")
     
-    exDat$Results$quasiSeq.res <- quasiSeq.res
-    exDat$Results$ERCCpvals <- pval.res
+    exDat$Results$allDE.res <- allDE.res
+    exDat$Results$ERCCpvals <- ERCC.pval.res
     
-    #### Code from QuasiSeq
-    #if (!Dispersion %in% c("Deviance", "Pearson")) 
-    #  stop("Unidentified Dispersion: Dispersion must be either 'Deviance' 
-    # or 'Pearson'.")
-    fit <- use.fit
-    spline.df <- NULL
-    LRT <- fit$LRT
-    phi.hat <- fit$phi.hat.dev
+    ### Using QLDisp code from edgeR to create similar ggplot with use.fit
+      glmfit <- use.fit
+      xlab = "Average Log2 CPM (Counts per million)"
+      ylab = "Squeezed QL Dispersion Estimates (Quarter-Root Mean Deviance)"
+      
+      A <- glmfit$AveLogCPM
     
-    mn.cnt <- fit$mn.cnt
-    den.df <- fit$den.df
-    num.df <- fit$num.df
-    Model = fit$Model
-    
-    phi.hat<-use.fit$phi.hat.dev[1:nrow(cnt)]
-    
-    mn.cnt<-rowMeans(cnt)
-    den.df=length(trt)-length(unique(trt))
-    
-    
-    #if (Dispersion == "Pearson") 
-    #  phi.hat <- fit$phi.hat.pearson
-    if (length(num.df) == 1) 
-        num.df <- rep(num.df, ncol(LRT))
-    shrink.phi <- function(phi.hat, den.df) {
-        phi.hat[phi.hat <= 0] <- min(phi.hat[phi.hat > 0])
-        z <- log(phi.hat)
-        z[z == Inf] <- max(z[z != Inf])
-        z[z == -Inf] <- min(z[z != -Inf])
-        mnz <- mean(z)
-        d0arg <- var(z) - trigamma((den.df)/2)
-        if (d0arg > 0) {
-            dif <- function(x, y) abs(trigamma(x) - y)
-            inverse.trigamma <- function(y) {
-                optimize(dif, interval = c(0,10000),y = y)$minimum
-            }
-            d0 <- 2 * inverse.trigamma(d0arg)
-            phi0 <- exp(mnz - digamma((den.df)/2) + digamma(d0/2) - 
-                            log(d0/(den.df)))
-            phi.shrink <- ((den.df) * phi.hat + d0 * phi0)/(den.df + 
-                                                                d0)
-        }
-        else {
-            phi.shrink <- rep(exp(mnz), length(z))
-            d0 <- Inf
-            phi0 <- exp(mnz)
-        }
-        return(list(phi.shrink = phi.shrink, d0 = d0, phi0 = phi0))
-    }
-    phi.hat[phi.hat < 0] <- min(phi.hat[phi.hat > 0])
-    phi.hat2 <- phi.hat
-    if (Model == "Poisson") 
-        phi.hat2[phi.hat < 1] <- 1
-    shrink <- shrink.phi(phi.hat, den.df)
-    phi.shrink <- shrink[[1]]
-    est.d0 <- shrink[[2]]
-    if (Model == "Poisson") 
-        phi.shrink[phi.shrink < 1] <- 1
-    y <- log(phi.hat)
-    y[y == -Inf] <- min(y[y != -Inf])
-    y[y == Inf] <- max(y[y != Inf])
-    spline.fit <- if (is.null(spline.df)) 
-        smooth.spline(x = log(mn.cnt), y = y)
-    else smooth.spline(x = log(mn.cnt), y = y, df = spline.df)
-    spline.pred <- predict(spline.fit, x = log(mn.cnt))$y
-    fit.method <- "spline"
-    y2 <- phi.hat/exp(spline.pred)
-    shrink <- shrink.phi(y2, den.df)
-    D0 <- shrink[[2]]
-    phi0 <- shrink[[3]]
-    print(paste("Spline scaling factor:", phi0))
-    
-    mean = mn.cnt
-    names(y)<-rownames(cnt)
-    
-    dispcnt = data.frame(mean = mean,y = y)
-    
-    xsort = NULL
-    ysort = NULL
-    dispcntSort = data.frame(xsort = sort(mean), 
-                             ysort = spline.pred[order(mn.cnt)]) # original
-    
-    mean <- mean[ERCC]
-    y <- y[ERCC]
-    Ratio <- NULL
-    dispERCC = data.frame(mean = mean[ERCC],y = y[ERCC], 
-                          Ratio=
-                              ERCC.Ratio$Ratio[match(ERCC,ERCC.Ratio$Feature)])
-    
-    dispERCC$Ratio <- as.factor(dispERCC$Ratio) 
-    
-    
-    quasiDispPlot = ggplot() + geom_point(data = dispcnt, aes(x = mean, y = y),
-                                          colour = "grey80", size = 5,
-                                          alpha = 0.6) +
-        geom_point(data = dispERCC, aes(x = mean, y = y,colour = Ratio), 
-                   size = 5, alpha = 0.6) + xlab("Mean Counts") + 
-        ylab("Log Dispersion Estimates from QuasiSeq)") + 
-        stat_smooth(data = dispcntSort,aes(x = xsort, y = ysort),
-                    colour = "black") + 
-        scale_x_log10() + colScale + theme_bw() +
-        theme(legend.justification=c(1,1), legend.position=c(1,1)) 
-    
+      if (is.null(A)) 
+        A <- aveLogCPM(glmfit)
+      s2 <- glmfit$deviance/glmfit$df.residual.zeros
+      if (is.null(glmfit$var.post)) {
+        stop("need to run glmQLFit before getting QL dispersion estimates")
+      }
+      
+      squeezedDisp <- data.frame(A = A, Dispersion = sqrt(sqrt(glmfit$var.post)))
+      dispERCC <- squeezedDisp[ERCC,]
+      dispERCC$Ratio <- ERCC.Ratio[ERCC,2]
+      
+      if (length(glmfit$var.prior) == 1L) {
+        trendPlot <- geom_abline(yintercept = sqrt(sqrt(glmfit$var.prior)))
+      } else {
+        o <- order(A)
+        dispTrend <- data.frame(Atrend = A[o], Dispersion = sqrt(sqrt(glmfit$var.prior[o])) )
+        trendPlot <-  geom_line(data = dispTrend, aes(Atrend, Dispersion))
+      }
+      quasiDispPlot <- ggplot() + geom_point(data = squeezedDisp, aes(x = A, y = Dispersion),
+                                             colour = "grey80", size = 5,
+                                             alpha = 0.6) +
+        geom_point(data = dispERCC, aes(x = A, y = Dispersion,colour = Ratio), 
+                   size = 5, alpha = 0.6) + xlab(xlab) + ylab(ylab) +
+        trendPlot +
+        #scale_x_log10() + 
+        colScale + theme_bw() +
+        theme(legend.justification=c(1,1), legend.position=c(0.9,0.9)) 
+  
     exDat$Figures$dispPlot <- quasiDispPlot
     exDat$Results$simcnt <- simcnt 
     cat("\nFinished examining dispersions\n")
