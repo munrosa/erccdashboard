@@ -3,7 +3,7 @@
 #' @param exDat    list, contains input data and stores analysis results
 #' 
 #' @details
-#' This function wraps the QuasiSeq differential expression testing package for
+#' This function wraps the edgeR differential expression testing package for
 #' datType = "count" or uses the limma package for differential expression 
 #' testing if datType = "array". Alternatively, for count data only, if
 #' correctly formatted DE test results are provided,
@@ -92,7 +92,7 @@ geneExprTest <- function(exDat){
                       "expression testing or view dispersion plots\n"))
         }else{
             if (isNorm == TRUE){
-                cat(paste0("\nQuasiSeq DE Testing for RNA-Seq requires count",
+                cat(paste0("\nedgeR DE Testing for RNA-Seq requires count",
                            " (integer) data.\n",
                            "To estimate AUC and LODR for normalized RNA-Seq",
                            "data\nthe file '",sampleInfo$filenameRoot,

@@ -1,3 +1,17 @@
+CHANGES IN VERSION 1.13.1
+-------------------------
+
+SIGNIFICANT USER-VISIBLE CHANGES
+    o replaced QuasiSeq with edgeR for differential expression testing, due to deprecation of QuasiSeq
+    o users will observe significant speed increases for DE testing
+    o users will observe changes in results from example data, Quasi-Likelihood methods are similar for edgeR and QuasiSeq, but not exactly identical, so P-value distributions are different, LODR estimates have changed.
+    o dispersion plot (dispPlot) is now generated via edgeR instead of QuasiSeq, using a similar Quasi-Likelihood dispersion shrinkage method.
+    
+    
+BUG FIXES AND MINOR IMPROVEMENTS
+    o changed behavior so that dispPlot is not deleted if DE testing is rerun, instead increment file name to prevent overwriting.
+
+
 CHANGES IN VERSION 1.7.2
 -------------------------
 
