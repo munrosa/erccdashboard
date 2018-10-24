@@ -9,7 +9,8 @@
 #' exDat <- initDat(datType="array", isNorm=FALSE, 
 #'                  exTable=UHRR.HBRR.arrayDat,
 #'                  filenameRoot="testRun", sample1Name="UHRR",
-#'                  sample2Name="HBRR", erccmix="RatioPair", 
+#'                  sample2Name="HBRR", erccmix="RatioPair",
+#'                  erccversion = "ERCC1", 
 #'                  erccdilution = 1, spikeVol = 50, 
 #'                  totalRNAmass = 2.5*10^(3), choseFDR=0.01)
 #'                  
@@ -68,6 +69,8 @@ erccROC <- function(exDat){
     # now build the ROCR prediction objects
     # Format of FCcode <- data.frame(Ratio=c("a","b","c","d"),
     #                                   FC=c(4, 1,.667,.5));
+    # First match the fold changes in pValDat
+    folds <- folds[folds$FC %in% pValDat$Fold,]
     FCcodeC <- folds[-c(which(folds$FC == 1)),]
     pool.pred <- NULL
     FPR <- NULL

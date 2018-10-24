@@ -46,7 +46,8 @@
 #' 
 #' exDat <- initDat(datType="count", isNorm = FALSE, exTable=MET.CTL.countDat, 
 #'                  filenameRoot = "testRun",sample1Name = "MET",
-#'                  sample2Name = "CTL", erccmix = "RatioPair", 
+#'                  sample2Name = "CTL", erccmix = "RatioPair",
+#'                  erccversion = "ERCC1",
 #'                  erccdilution = 1/100, spikeVol = 1, totalRNAmass = 0.500,
 #'                  choseFDR = 0.1)
 #' summary(exDat)                      
@@ -58,7 +59,8 @@
 initDat <- function(datType=NULL, isNorm=FALSE, exTable=NULL, 
                     repNormFactor=NULL, filenameRoot=NULL,
                     sample1Name=NULL, sample2Name=NULL, 
-                    erccmix="RatioPair", erccdilution=1,
+                    erccmix="RatioPair", erccversion = "ERCC1", 
+                    erccdilution=1,
                     spikeVol=1, totalRNAmass=1,choseFDR=0.05,
                     ratioLim=c(-4,4), signalLim=c(-14,14), 
                     userMixFile=NULL){
@@ -121,7 +123,8 @@ initDat <- function(datType=NULL, isNorm=FALSE, exTable=NULL,
     
     sampleInfo = list(sample1Name = sample1Name,
                       sample2Name = sample2Name, choseFDR = choseFDR,
-                      erccdilution = erccdilution, erccmix = erccmix,
+                      erccdilution = erccdilution, erccversion = erccversion,
+                      erccmix = erccmix,
                       spikeVol = spikeVol, totalRNAmass = totalRNAmass,
                       isNorm = isNorm, kNorm = kNorm, datType = datType)
     
@@ -135,7 +138,7 @@ initDat <- function(datType=NULL, isNorm=FALSE, exTable=NULL,
     
     ############################################################################
     # Run loadERCCInfo function to obtain ERCC information
-    exDat <- loadERCCInfo(exDat, erccmix, userMixFile)
+    exDat <- loadERCCInfo(exDat, erccmix, erccversion, userMixFile)
     
     ############################################################################ 
     # Add experimental data (exTable) to exDat structure

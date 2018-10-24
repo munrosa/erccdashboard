@@ -1,17 +1,28 @@
-loadERCCInfo <- function(expDat, erccmix = NULL, userMixFile=NULL){
+loadERCCInfo <- function(expDat, erccmix = NULL, erccversion = NULL, userMixFile=NULL){
     # Get the ERCC Mix definition file provided by user and combine it with the 
     ## package ERCCDef file
-    ERCCMix1and2 <- NULL
-    data(ERCC, envir = environment())
-    #   load(file = system.file("data/ERCC.RData", 
-    #                           package = "erccdashboard"))
     
-    if (is.null(userMixFile)){
-        MixDef <- ERCCMix1and2
-    }else{
+    data(ERCC, envir = environment())
+    
+    stopifnot(!is.null(erccversion))
+    
+    if (erccversion == "ERCC1"){
+      if(is.null(userMixFile)){
+        MixDef <- ERCCMix1and2  
+      }else{
         MixDef <- read.csv(userMixFile)
+      }
+      ERCCDef <- ERCCDef
     }
-    ERCCDef <- ERCCDef
+    if (erccversion == "ERCC2"){
+      if(is.null(userMixFile)){
+        MixDef <- ERCC2Mixes
+      }else{
+        MixDef <- read.csv(userMixFile)
+      }
+      ERCCDef <- ERCC2Def
+    }
+    
     
     names(MixDef)[1:2] <- c("Feature","Ratio") 
     

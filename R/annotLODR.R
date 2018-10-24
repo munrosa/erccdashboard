@@ -8,7 +8,8 @@
 #' exDat <- initDat(datType="array", isNorm=FALSE, 
 #'                  exTable=UHRR.HBRR.arrayDat,
 #'                  filenameRoot="testRun", sample1Name="UHRR",
-#'                  sample2Name="HBRR", erccmix="RatioPair", 
+#'                  sample2Name="HBRR", erccmix="RatioPair",
+#'                  erccversion = "ERCC1", 
 #'                  erccdilution = 1, spikeVol = 50, 
 #'                  totalRNAmass = 2.5*10^(3), choseFDR=0.01)
 #'                  

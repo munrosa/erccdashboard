@@ -1,2 +1,2 @@
-ERCC: ERCCDef ERCCMix1and2
+ERCC: ERCCDef ERCCMix1and2 ERCC2Def ERCC2Mixes
 SEQC.Example: UHRR.HBRR.arrayDat MET.CTL.countDat UHRR.HBRR.countDat MET.CTL.totalReads UHRR.HBRR.totalReads

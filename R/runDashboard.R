@@ -21,8 +21,11 @@
 #'                      experiment
 #' @param sample2Name   string name for sample 2 in the gene expression
 #'                      experiment
-#' @param erccmix     Name of ERCC mixture design, "RatioPair" is 
+#' @param erccmix       Name of ERCC mixture design, "RatioPair" is 
 #'                      default, the other option is "Single"
+#' @param erccversion   Name of ERCC mixture design, "ERCC1" is 
+#'                      default for original ERCC set, the other option 
+#'                      is "ERCC2" for the ERCC 2.0 control set
 #' @param erccdilution  unitless dilution factor used in dilution of the Ambion 
 #'                      ERCC spike-in mixture solutions 
 #' @param spikeVol      volume in microliters of diluted ERCC mix spiked into
@@ -47,7 +50,8 @@
 #'                      exTable = MET.CTL.countDat, 
 #'                      filenameRoot = "COH.ILM",
 #'                      sample1Name = "MET", sample2Name = "CTL", 
-#'                      erccmix = "RatioPair", erccdilution = 1/100, 
+#'                      erccmix = "RatioPair", erccversion = "ERCC1", 
+#'                      erccdilution = 1/100, 
 #'                      spikeVol = 1, totalRNAmass = 0.500,choseFDR = 0.1)
 #'                  
 #' summary(exDat)
@@ -58,7 +62,8 @@ runDashboard <- function(datType=NULL, isNorm = FALSE,
                          exTable=NULL, repNormFactor=NULL,
                          filenameRoot = NULL,
                          sample1Name = NULL,sample2Name = NULL, 
-                         erccmix = "RatioPair", erccdilution = 1,
+                         erccmix = "RatioPair", 
+                         erccversion = "ERCC1", erccdilution = 1,
                          spikeVol = 1, totalRNAmass = 1,choseFDR = 0.05,
                          ratioLim=c(-4,4),signalLim=c(-14,14),
                          userMixFile=NULL){
@@ -68,7 +73,7 @@ runDashboard <- function(datType=NULL, isNorm = FALSE,
     exDat <- initDat(datType=datType, isNorm = isNorm, exTable=exTable, 
                      repNormFactor=repNormFactor, filenameRoot=filenameRoot,
                      sample1Name=sample1Name, sample2Name=sample2Name, 
-                     erccmix=erccmix, erccdilution=erccdilution, 
+                     erccmix=erccmix, erccversion=erccversion, erccdilution=erccdilution, 
                      spikeVol=spikeVol, totalRNAmass=totalRNAmass,
                      choseFDR=choseFDR,ratioLim = ratioLim,
                      signalLim = signalLim,userMixFile=userMixFile)

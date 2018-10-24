@@ -12,7 +12,7 @@
 #' 
 #' exDat <- initDat(datType="count", isNorm=FALSE, exTable=MET.CTL.countDat, 
 #'                  filenameRoot="testRun", sample1Name="MET", 
-#'                  sample2Name="CTL", erccmix="RatioPair", 
+#'                  sample2Name="CTL", erccmix="RatioPair", erccversion = "ERCC1",
 #'                  erccdilution=1/100, spikeVol=1, totalRNAmass=0.500,
 #'                  choseFDR=0.1)
 #'                  
