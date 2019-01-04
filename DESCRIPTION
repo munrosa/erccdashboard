@@ -2,7 +2,7 @@ Package: erccdashboard
 Type: Package
 Title: Assess Differential Gene Expression Experiments with ERCC
         Controls
-Version: 1.17.0
+Version: 1.17.1
 Author: Sarah Munro, Steve Lund
 Maintainer: Sarah Munro <sarah.munro@gmail.com>
 Description: Technical performance metrics for differential gene expression
@@ -51,7 +51,7 @@ Collate:
     saveERCCPlots.R
     maSignal.R
     annotLODR.R
-biocViews: GeneExpression, Transcription, AlternativeSplicing,
+biocViews: ImmunoOncology, GeneExpression, Transcription, AlternativeSplicing,
     DifferentialExpression, DifferentialSplicing, Genetics,
     Microarray, mRNAMicroarray, RNASeq, BatchEffect,
     MultipleComparison, QualityControl
