@@ -1,0 +1,82 @@
+---
+title: "ToDoList ERCC2 dashboard updates"
+author: "Sarah Munro"
+date: "7/23/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment = "")
+require(erccdashboard)
+```
+
+### To Do list
+
+1. create new ERCC2 R data for use in the erccdashboard, finish updating SIRV mix files
+  a. Need to add SIRV Info to ERCCDef and ERCCMix1and2
+  Create a mapping for the SIRVs to ERCC numbers.
+
+  SIRV101 --> ERCC-20101
+  SIRV102 --> ERCC-20102
+  SIRVNNN --> ERCC-20NNN
+
+
+```{r}
+data(ERCC)
+SIRVDef <- read.csv("~/GoogleDrive/ManuscriptsInPrep/ERCC2.0Paper/Analysis/Code/SpikeInValidationMS/data/SIRVDef.csv")
+head(SIRVDef)
+head(ERCCDef)
+names(SIRVDef)[3] <- "GC"
+ERCC2Def <- rbind(ERCCDef,SIRVDef)
+ERCC2Def$Feature <- gsub(pattern = "SIRV", replacement = "ERCC-20", ERCC2Def$Feature)
+# remove the asterisk
+ERCC2Def$Feature <- gsub(pattern = "[*]", replacement = "", ERCC2Def$Feature)
+summary(ERCC2Def)
+summary(SIRVDef)
+```
+
+Now add SIRV info to ERCCMix1and2
+
+```{r}
+
+SIRVmixes <- read.csv("~/GoogleDrive/ManuscriptsInPrep/ERCC2.0Paper/Analysis/Code/SpikeInValidationMS/data/SIRVMixesE0E1E2.csv")
+head(SIRVmixes)
+summary(SIRVmixes)
+head(ERCCMix1and2)
+names(ERCCMix1and2)[1] <- "Feature"
+#Convert femto moles to attomoles, multiply SIRV concentrations by 1000
+SIRVmixes$Mix1Conc.Attomoles_ul <- SIRVmixes$E1.molarity.in.SIRV.mix...fmoles.µl.*1000
+SIRVmixes$Mix2Conc.Attomoles_ul <- SIRVmixes$E2.molarity.in.SIRV.mix...fmoles.µl.*1000
+SIRVmixes <- SIRVmixes[-c(3,4)]
+head(SIRVmixes)
+ERCC2Mixes <- rbind(ERCCMix1and2,SIRVmixes)
+ERCC2Mixes$Feature <- gsub(pattern = "SIRV", replacement = "ERCC-20", ERCC2Mixes$Feature)
+
+```
+Made a bunch of changes to the code to add in an erccversion variable and update the ERCCDef and ERCCMix data to include the SIRVs.
+
+None of the code seemed to break the dashboard (example(runDashboard) still works)
+
+Prepping data to test SIRVs...
+Will need to figure out how to deal with SIRV names under the hood. Translation is simple
+"SIRV" --> "ERCC-2"
+Will want to add code that does this and then resorts the rows of the ERCC data every time.
+
+```{r}
+load("~/GoogleDrive/ManuscriptsInPrep/ERCC2.0Paper/Analysis/Code/SpikeInValidationMS/data/isoformCounts.RData")
+head(kallistoData$CellLineRun1)
+testmatrix <- kallistoData$CellLineRun1
+colnames(testmatrix)
+grep("HMK_C[1:2]",colnames(testmatrix))
+testmatrix[,grep("HMK_C[1:2]",colnames(testmatrix))]
+HMKC1C2 <- testmatrix[,grep("HMK_C[1:2]",colnames(testmatrix))]
+gsub(pattern = "SIRV", replacement = "ERCC-20", rownames(HMKC1C2))
+rownames(HMKC1C2) <- gsub(pattern = "SIRV", replacement = "ERCC-20", rownames(HMKC1C2))
+rownames(HMKC1C2)[grep("ERCC-",rownames(HMKC1C2))]
+# cut the ercc2 data out of the structure, reorder it in ascending order and tack it back on to the top of the data frame
+sort(rownames(HMKC1C2)[grep("ERCC-",rownames(HMKC1C2))])
+```
+
+
+
+```
