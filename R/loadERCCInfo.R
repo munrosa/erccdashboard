@@ -46,7 +46,7 @@ loadERCCInfo <- function(expDat, erccmix = NULL, userMixFile=NULL){
                                               levels(idCols$Ratio)[i])])
     }
     FCcode = data.frame(Ratio = levels(idCols$Ratio), FC = FC) 
-    
+   
     legendLabels = as.character(FCcode$Ratio)
     erccInfo = list(idColsSRM = idCols, MixDef = MixDef, FCcode = FCcode, 
                     legendLabels = legendLabels)

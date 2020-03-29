@@ -167,6 +167,7 @@ maSignal <-function(exDat, alphaPoint=0.8, r_mAdjust=TRUE, replicate=TRUE){
     #countPair$Ratio <- as.factor(as.character(countPair$Ratio))
     
     maData$Nominal = FCcode$FC[1]
+    FCcode$Ratio <- as.factor(FCcode$Ratio)
     for (i in 2:nlevels(FCcode$Ratio)){
         maData$Nominal[which(maData$Ratio == FCcode$Ratio[i])] = FCcode$FC[i]
     }

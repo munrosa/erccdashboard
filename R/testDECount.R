@@ -51,10 +51,12 @@ testDECount <- function(sampleInfo, exDat, cnt = cnt, info = info){
     
     ERCC.FC = idCols[c(1,4)];rownames(ERCC.FC)<-ERCC.FC[,1]
     
-    ERCC.FC$NumRatio <- 1
+    ERCC.FC$NumRatio <- NA
+    FCcode$Ratio <- as.factor(FCcode$Ratio)
     for (i in 1:nlevels(FCcode$Ratio)){
+      print(i)
         ERCC.FC$NumRatio[which(ERCC.FC$Ratio == 
-                                   as.character(FCcode$Ratio[i]))]=FCcode$FC[i]  
+                                   FCcode$Ratio[i])]=FCcode$FC[i]  
     }
     ERCC.Ratio = ERCC.FC[c(1,2)]
     ERCC.FC = ERCC.FC[-c(2)]

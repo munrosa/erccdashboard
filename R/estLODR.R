@@ -155,7 +155,8 @@ estLODR <- function(exDat,kind = "ERCC", prob=0.9){
     #lodr.res<-NULL; set.seed(1)
     lineDat <-NULL
     
-    pval.res$Ratio = "Ratio"
+    pval.res$Ratio = NA
+    FCcode$Ratio <- as.factor(FCcode$Ratio)
     for (i in 1:nlevels(FCcode$Ratio)){
         pval.res$Ratio[which(pval.res$Fold == 
                                  FCcode$FC[i])]=as.character(FCcode$Ratio[i])
